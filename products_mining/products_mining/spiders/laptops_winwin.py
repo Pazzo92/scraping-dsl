@@ -18,7 +18,6 @@ class WinwinLaptopSpider(scrapy.Spider):
             return [scrapy.Request(link)]   
         
         next_page = response.xpath("//*/a[@class='next i-next']/@href").extract_first()
-        print('da')
         if next_page is not None:
             return [scrapy.Request(next_page, callback=self.parse_links)]
         
@@ -26,28 +25,14 @@ class WinwinLaptopSpider(scrapy.Spider):
         
         laptop = Laptop()
         laptop['name'] = response.css('h1::text').extract_first()
-        laptop['price'] = response.css('div.price-item.currency-item h5::text').extract_first().strip()
+        laptop['price'] = response.css('div.price-box span.price::text').extract_first().strip()
         
-        table = response.css('div.main.clearfix table.product-specs')
+        table = response.css('div.product-panels-content table.data-table')
         for tr in table.css('tr'):
-            name = tr.css('th::text').extract_first()
-            if name == 'GrafiÄ�ka karta':
-                value = tr.css('a::text').extract_first().strip()
-            elif name == 'HDD1':
-                value = str(tr.css('td::text').extract_first()).split(':')[1]
-            elif name == 'Ekran':
-                value = tr.css('td::text').extract()[1].split(':')[1].strip()
-            elif name == 'Procesor':
-                value = tr.css('a::text').extract_first()
-            else:
-                value = tr.css('td::text').extract_first().strip()
+            name = tr.css('th::text').extract_first().strip()
+            value = tr.css('td::text').extract_first().strip()
             
             property = self.gigatron_dictionary(name)
-            if property == 'processor_model':
-                laptop['processor_speed'] = tr.css('td::text').extract()[0].split(':')[1].strip()
-                laptop['catche_memory'] = tr.css('td::text').extract()[1].split(':')[1].strip()
-            elif property == 'screen_resolution':
-                laptop['screen_type'] = tr.css('td::text').extract()[0].strip()
             
             if property !='':
                 laptop[property] = value
