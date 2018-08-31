@@ -39,7 +39,7 @@ class WinwinLaptopSpider(scrapy.Spider):
         
         print('laptop')
             
-    def gigatron_dictionary(self, x):
+    def winwin_dictionary(self, x):
         return {
         'RAM memorija': 'ram',
         'Dijagonala ekrana': 'screen_size',
@@ -67,6 +67,4 @@ class WinwinLaptopSpider(scrapy.Spider):
         'TeÅ¾ina (kg)' : 'weight',
         'Memorija' : 'ram_type'
         }.get(x, '')   
-        
-        
         

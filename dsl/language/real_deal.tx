@@ -1,0 +1,27 @@
+import sample
+
+Program:
+	"ProductType" "=" ProductType
+	"Criteria" "=" "{" criteria *=Criteria
+	"}"
+;
+
+Criteria:
+	Matches | ValueCheck
+;
+	
+Matches:
+	field = STRING "=" STRING|INT
+;
+
+ValueCheck:
+	GreaterThan | LessThan
+;
+
+GreaterThan:
+	field = STRING ">" value = INT
+;
+
+LessThan:
+	field = STRING "<" value = INT
+;

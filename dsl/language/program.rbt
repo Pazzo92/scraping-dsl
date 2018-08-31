@@ -1,0 +1,10 @@
+ProductType = {
+				name "Laptop"
+				fields : "procesor", "ekran"
+     		   }
+Criteria = {
+				"procesor" = "Intel Celeron Dual Core Processor N3350"
+				"ekran" = "14 HD LED backlight, CineCrystal"
+				"cena" > 30 000
+				"cena" < 50 000
+			}

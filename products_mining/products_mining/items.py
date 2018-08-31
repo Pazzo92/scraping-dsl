@@ -6,25 +6,6 @@
 # http://doc.scrapy.org/en/latest/topics/items.html
 #
 
-#Operating system
-#Color
-#Optics    
-#VGA
-#SSD    
-#Batery    
-#Touch screen
-#Speakers
-#Web camera
-#HDMI port
-#VGA port
-#USB 
-#Network card
-#Bluetooth
-#Card reader 
-#Dimensions
-#Weight
-#
-
 import scrapy
 
 class Laptop(scrapy.Item):

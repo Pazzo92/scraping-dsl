@@ -1,7 +1,4 @@
 import scrapy
-from scrapy.http import Request
-from scrapy.contrib.loader import ItemLoader
-import products_mining.items
 from products_mining.items import Laptop
 
 class GigatronLaptopSpider(scrapy.Spider):
