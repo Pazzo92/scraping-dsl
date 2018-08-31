@@ -1,7 +1,7 @@
 import sample
 
 Program:
-	"ProductType" "=" ProductType
+	"ProductType" "=" productType = ProductType
 	"Criteria" "=" "{" criteria *=Criteria
 	"}"
 ;

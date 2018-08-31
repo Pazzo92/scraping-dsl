@@ -1,14 +1,6 @@
 ProductType:
 	"{"
-	 name = TypeName
-	 "fields : " property *= Property[","]
-	"}" 
-;
-
-TypeName:
 	"name" name = STRING
-;
-
-Property:
-	 property = STRING
+	 "fields : " properties *= STRING[","]
+	"}" 
 ;
