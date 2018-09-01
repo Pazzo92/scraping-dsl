@@ -7,15 +7,11 @@ Program:
 ;
 
 Criteria:
-	Matches | ValueCheck
+	matches = Matches | greaterThan = GreaterThan | lessThan = LessThan
 ;
 	
 Matches:
-	field = STRING "=" STRING|INT
-;
-
-ValueCheck:
-	GreaterThan | LessThan
+	field = STRING "=" value = STRING|INT
 ;
 
 GreaterThan:

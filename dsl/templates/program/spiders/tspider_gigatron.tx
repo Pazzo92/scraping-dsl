@@ -1,0 +1,51 @@
+import scrapy
+from products_mining.items import {{model.productType.name}}
+
+class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
+	name = "gigatron_{{model.productType.name}}"
+	
+	def start_requests(self):
+		url = self.gigatron_dictionary('{{model.productType.name.lower()}}')
+		return [scrapy.Request(url, callback=self.get_number_of_items)]
+		
+	def get_number_of_items(self, response):
+		number_of_items = response.css('b#total::text').extract_first()
+		return [scrapy.Request(response.request.url+ '?limit=' + number_of_items, callback=self.parse_links)]
+	 
+	def parse_links(self,response):
+		links = response.xpath("//*/h4/a[@class='product-name']/@href").extract()
+		for link in links:
+			return [scrapy.Request(link)]
+		
+	def parse(self,response):
+		
+		{{model.productType.name.lower()}} = {{model.productType.name}}()
+		
+		properties_list = []
+		{% for prop in model.productType.properties %}
+		{% if prop.lower() == 'cena' %}
+		{{model.productType.name.lower()}}['{{prop}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip()
+		{% elif prop.lower() == 'naziv' or prop.lower() == 'ime' %}
+		{{model.productType.name.lower()}}['{{prop}}'] = response.css('h1::text').extract_first()
+		{% else %}
+		properties_list.append('{{prop.lower()}}')
+		{% endif %}
+		{% endfor %}
+		
+		table = response.css('div.main.clearfix table.product-specs')
+		for tr in table.css('tr'):
+			name = tr.css('th::text').extract_first().strip()
+			link = tr.css('a::text').extract_first()
+			if link is not None:
+				value = link.strip()
+			else:
+				value = tr.css('td::text').extract_first().strip()
+			
+			for property in properties_list:
+				if property == name.lower():
+					{{model.productType.name.lower()}}[name] = value
+					
+		def gigatron_dictionary(self, x):
+			return {
+        	'laptop': 'https://www.gigatron.rs/laptop_racunari'
+        	}.get(x, '')  

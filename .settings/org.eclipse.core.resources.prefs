@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//dsl/output/products_mining/pipelines.py=utf-8
 encoding//dsl/output/products_mining/settings.py=utf-8
+encoding//dsl/templates/program/spiders/tspider_gigatron.tx=UTF-8
+encoding//dsl/templates/program/spiders/tspider_winwin.tx=UTF-8
 encoding//products_mining/products_mining/items.py=utf-8
 encoding//products_mining/products_mining/middlewares.py=utf-8
 encoding//products_mining/products_mining/pipelines.py=utf-8

@@ -1,3 +1,51 @@
+from scrapy.exceptions import DropItem
+
 class ProductsMiningPipeline(object):
-    def process_item(self, item, spider):
-        return item
+
+	{% for criteria in model.criteria %}
+	{% if criteria.matches%}
+	{{criteria.matches.field}}={% if criteria.matches.value is string %}'{{criteria.matches.value}}'{% else %}{{criteria.matches.value}}{% endif %} 
+	{% elif criteria.greaterThan %}
+	max_{{criteria.greaterThan.field}} = {{criteria.greaterThan.value}}
+	{% elif criteria.lessThan %}
+	min_{{criteria.lessThan.field}} = {{criteria.lessThan.value}}
+	{% endif %}
+	{% endfor %}
+		
+	def process_item(self, item, spider):
+	{% for criteria in model.criteria %}
+		{% if loop.first %}
+		{% if criteria.matches%}
+		if(self.{{criteria.matches.field}} not in item['{{criteria.matches.field}}']
+		{% elif criteria.greaterThan %}
+		if(self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}}'])
+		{% elif criteria.lessThan %}
+		if(self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}})'])	
+		{% endif %}
+		{% elif loop.last %}
+		{% if criteria.matches%}
+		or self.{{criteria.matches.field}} not in item['{{criteria.matches.field}}']):
+			raise DropItem("Failed to satisfy criteria: " % item)
+		else:
+			return item		
+		{% elif criteria.greaterThan %}
+		or self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}})'])):
+			raise DropItem("Failed to satisfy criteria: " % item)
+		else:
+			return item		
+		{% elif criteria.lessThan %}
+		or self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}})'])):
+			raise DropItem("Failed to satisfy criteria: " % item)
+		else:
+			return item		
+		{% endif %}
+		{% else %}
+		{% if criteria.matches%}
+		or self.{{criteria.matches.field}} not in item['{{criteria.matches.field}}']
+		{% elif criteria.greaterThan %}
+		or self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}}'])
+		{% elif criteria.lessThan %}
+		or self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}})'])		
+		{% endif %}
+		{% endif %}
+	{% endfor %}

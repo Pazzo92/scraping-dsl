@@ -10,7 +10,7 @@ class GigatronLaptopSpider(scrapy.Spider):
         
     def get_number_of_items(self, response):
         number_of_items = response.css('b#total::text').extract_first()
-        return [scrapy.Request('https://www.gigatron.rs/laptop_racunari?limit=1', callback=self.parse_links)]
+        return [scrapy.Request(response.request.url+ '?limit=' + number_of_items, callback=self.parse_links)]
     
     def parse_links(self,response):
         links = response.xpath("//*/h4/a[@class='product-name']/@href").extract()
@@ -32,7 +32,7 @@ class GigatronLaptopSpider(scrapy.Spider):
         laptop['name'] = response.css('h1::text').extract_first()
         laptop['price'] = response.css('div.price-item.currency-item h5::text').extract_first().strip()
         
-        if (laptop.price > max_cena) | (laptop.price < min_cena):
+        if (float(laptop['price'])> max_cena) | (float(laptop['price'])< min_cena):
             return
         
         table = response.css('div.main.clearfix table.product-specs')

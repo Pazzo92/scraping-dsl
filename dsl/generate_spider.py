@@ -19,9 +19,10 @@ class SpiderGenerator(BaseGenerator):
             if not os.path.exists(folder):
                 os.makedirs(folder)
     @staticmethod
-    def call_post_gen_script(base_path):
+    def call_post_gen_script(self, base_path):
         os.chdir(base_path)
-        scrapy.cmdline.execute(argv=['scrapy', 'crawl', 'winwin_laptops'])
+        scrapy.cmdline.execute(argv=['scrapy', 'crawl', 'winwin_'+self.model.productType.name])
+        scrapy.cmdline.execute(argv=['scrapy', 'crawl', 'gigatron_'+self.model.productType.name])
 
 
     def generate_application(self, location=""):
@@ -44,7 +45,7 @@ class SpiderGenerator(BaseGenerator):
         self.generate_program(base_source_path, spiders_path, base_path)
 
         # post gen events
-        # self.call_post_gen_script(base_path)
+  #      self.call_post_gen_script(base_path)
 
     def generate_program(self, base_source_path, spiders_path, program_path):
         # program files
@@ -56,7 +57,7 @@ class SpiderGenerator(BaseGenerator):
             self.generate(base_source_path + '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
                           {'model': self.model}, program_path)
             
-        spiders_file_gen_list = {'__init__', 'spiders'}
+        spiders_file_gen_list = {'__init__', 'spider_gigatron', 'spider_winwin'}
             
         for e in spiders_file_gen_list:
             self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
