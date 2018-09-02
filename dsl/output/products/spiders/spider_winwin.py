@@ -2,7 +2,7 @@ import scrapy
 from products.items import Laptop
 
 class WinwinLaptopSpider(scrapy.Spider):
-	name = "winwin_Laptop"
+	name = "winwin_laptop"
 	
 	def start_requests(self):
 		url = self.winwin_dictionary('laptop')

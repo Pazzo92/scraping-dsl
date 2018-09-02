@@ -1,5 +1,5 @@
 import scrapy
-from items import {{model.productType.name}}
+from products.items import {{model.productType.name}}
 
 class Winwin{{model.productType.name}}Spider(scrapy.Spider):
 	name = "winwin_{{model.productType.name}}"

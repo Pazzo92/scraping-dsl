@@ -38,13 +38,13 @@ COOKIES_ENABLED = False
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'products.middlewares.ProductsMiningSpiderMiddleware': 543,
+#    'products_mining.middlewares.ProductsMiningSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'products.middlewares.MyCustomDownloaderMiddleware': 543,
+#    'products_mining.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
