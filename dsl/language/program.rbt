@@ -3,8 +3,8 @@ ProductType = {
 				fields : "procesor", "ekran" , "cena" , "naziv"
      		   }
 Criteria = {
-				"procesor" = "Intel Core i3"
-				"ekran" = "14 HD LED"
+				"procesor" = "Intel Core i3-7130U"
+				"ekran" = "15.6"
 				"cena" > 30000
 				"cena" < 50000
 			}

@@ -34,7 +34,7 @@ class SpiderGenerator(BaseGenerator):
             outputlocation = location
 
         # path to the target folder
-        base_path = os.path.join(outputlocation, 'products_mining')
+        base_path = os.path.join(outputlocation, 'products')
         spiders_path = os.path.join(base_path, 'spiders')
         
         folder_gen_list = [base_path,spiders_path]
@@ -45,7 +45,7 @@ class SpiderGenerator(BaseGenerator):
         
         self.copy_necessary_files(necessary_source_path, outputlocation)
         # post gen events
-        self.call_post_gen_script(outputlocation)
+        #self.call_post_gen_script(outputlocation)
 
     def generate_program(self, base_source_path, spiders_path, program_path):
         # program files

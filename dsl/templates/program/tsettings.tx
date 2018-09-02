@@ -1,3 +1,5 @@
+import datetime
+
 BOT_NAME = 'products'
 
 SPIDER_MODULES = ['products.spiders']
@@ -82,4 +84,4 @@ ITEM_PIPELINES = {
 MONGODB_SERVER = "localhost"
 MONGODB_PORT = 27017
 MONGODB_DB = "products_mining"
-MONGODB_COLLECTION = "product"
+MONGODB_COLLECTION = "search_result_"+str(datetime.datetime.now())

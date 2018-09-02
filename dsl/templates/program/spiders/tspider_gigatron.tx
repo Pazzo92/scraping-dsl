@@ -1,5 +1,6 @@
 import scrapy
 from products.items import {{model.productType.name}}
+import re
 
 class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 	name = "gigatron_{{model.productType.name}}"
@@ -15,7 +16,7 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 	def parse_links(self,response):
 		links = response.xpath("//*/h4/a[@class='product-name']/@href").extract()
 		for link in links:
-			return [scrapy.Request(link)]
+			yield scrapy.Request(link)
 		
 	def parse(self,response):
 		
@@ -24,7 +25,7 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 		properties_list = []
 		{% for prop in model.productType.properties %}
 		{% if prop.lower() == 'cena' %}
-		{{model.productType.name.lower()}}['{{prop}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip()
+		{{model.productType.name.lower()}}['{{prop}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().extract_first().strip().replace(".","")
 		{% elif prop.lower() == 'naziv' or prop.lower() == 'ime' %}
 		{{model.productType.name.lower()}}['{{prop}}'] = response.css('h1::text').extract_first()
 		{% else %}
@@ -43,9 +44,11 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 			
 			for property in properties_list:
 				if property == name.lower():
-					{{model.productType.name.lower()}}[name] = value
-					
-		def gigatron_dictionary(self, x):
+					{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9. ]',r'',value.strip())
+		
+		yield {{model.productType.name.lower()}}
+			
+	def gigatron_dictionary(self, x):
 			return {
         	'laptop': 'https://www.gigatron.rs/laptop_racunari'
         	}.get(x, '')
