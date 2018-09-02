@@ -5,5 +5,8 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/${PROJECT_DIR_NAME}/products_mining</path>
 <path>/${PROJECT_DIR_NAME}</path>
+<path>/${PROJECT_DIR_NAME}/dsl/output/products_mining</path>
+<path>/${PROJECT_DIR_NAME}/dsl/output</path>
+<path>/${PROJECT_DIR_NAME}/dsl/output/products_mining/spiders</path>
 </pydev_pathproperty>
 </pydev_project>

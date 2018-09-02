@@ -1,5 +1,5 @@
 import scrapy
-from products_mining.items import Laptop
+from items import Laptop
 
 class WinwinLaptopSpider(scrapy.Spider):
 	name = "winwin_Laptop"

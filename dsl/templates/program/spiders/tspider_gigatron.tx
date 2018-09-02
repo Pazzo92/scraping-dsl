@@ -1,5 +1,5 @@
 import scrapy
-from products_mining.items import {{model.productType.name}}
+from items import {{model.productType.name}}
 
 class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 	name = "gigatron_{{model.productType.name}}"
@@ -48,4 +48,6 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 		def gigatron_dictionary(self, x):
 			return {
         	'laptop': 'https://www.gigatron.rs/laptop_racunari'
-        	}.get(x, '')  
+        	}.get(x, '')
+        	
+        

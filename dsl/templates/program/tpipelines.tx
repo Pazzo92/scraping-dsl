@@ -1,4 +1,6 @@
 from scrapy.exceptions import DropItem
+from scrapy.conf import settings
+import pymongo
 
 class ProductsMiningPipeline(object):
 
@@ -11,7 +13,15 @@ class ProductsMiningPipeline(object):
 	min_{{criteria.lessThan.field}} = {{criteria.lessThan.value}}
 	{% endif %}
 	{% endfor %}
-		
+	
+	def __init__(self):
+		connection = pymongo.MongoClient(
+			settings['MONGODB_SERVER'],
+			settings['MONGODB_PORT']
+		)
+		db = connection[settings['MONGODB_DB']]
+		self.collection = db[settings['MONGODB_COLLECTION']]
+	
 	def process_item(self, item, spider):
 	{% for criteria in model.criteria %}
 		{% if loop.first %}
@@ -27,16 +37,19 @@ class ProductsMiningPipeline(object):
 		or self.{{criteria.matches.field}} not in item['{{criteria.matches.field}}']):
 			raise DropItem("Failed to satisfy criteria: " % item)
 		else:
+			self.collection.insert(dict(item))
 			return item		
 		{% elif criteria.greaterThan %}
 		or self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}})'])):
 			raise DropItem("Failed to satisfy criteria: " % item)
 		else:
+			self.collection.insert(dict(item))
 			return item		
 		{% elif criteria.lessThan %}
 		or self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}})'])):
 			raise DropItem("Failed to satisfy criteria: " % item)
 		else:
+			self.collection.insert(dict(item))
 			return item		
 		{% endif %}
 		{% else %}

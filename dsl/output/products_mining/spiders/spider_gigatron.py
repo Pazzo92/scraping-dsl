@@ -1,5 +1,5 @@
 import scrapy
-from products_mining.items import Laptop
+from items import Laptop
 
 class GigatronLaptopSpider(scrapy.Spider):
 	name = "gigatron_Laptop"
@@ -40,18 +40,9 @@ class GigatronLaptopSpider(scrapy.Spider):
 				if property == name.lower():
 					laptop[name] = value
 					
-		procesor='Intel Core i3' 
-		ekran='14 HD LED' 
-		max_cena = 30000
-		min_cena = 50000
-		
-		if(procesor not in laptop['procesor']
-		or ekran not in laptop['ekran']
-		or max_cena < float(laptop['cena'])
-		or min_cena > float(laptop['cena)'])):
-			return		
-
 		def gigatron_dictionary(self, x):
 			return {
         	'laptop': 'https://www.gigatron.rs/laptop_racunari'
-        	}.get(x, '')  
+        	}.get(x, '')
+        	
+        
