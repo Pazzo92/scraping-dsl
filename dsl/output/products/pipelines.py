@@ -5,10 +5,12 @@ import pymongo
 
 class ProductsMiningPipeline(object):
 
-	procesor='Intel Core i3-7130U' 
+	procesor='Intel Core i5' 
 	ekran='15.6' 
-	min_cena = 30000
-	max_cena = 50000
+	min_cena = 50000
+	max_cena = 90000
+	memorija='8' 
+	graficka='GeForce' 
 	
 	def __init__(self):
 		settings = Settings()
@@ -24,7 +26,9 @@ class ProductsMiningPipeline(object):
 		if(self.procesor not in item['procesor']
 		or self.ekran not in item['ekran']
 		or self.max_cena < float(item['cena'])
-		or self.min_cena > float(item['cena'])):
+		or self.min_cena > float(item['cena'])		
+		or self.memorija not in item['memorija']
+		or self.graficka not in item['graficka']):
 			raise DropItem("Failed to satisfy criteria: " % item)
 		else:
 			self.collection.insert(dict(item))

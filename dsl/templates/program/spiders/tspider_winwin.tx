@@ -1,6 +1,7 @@
 import scrapy
 from products.items import {{model.productType.name}}
 import re
+import unicodedata
 
 class Winwin{{model.productType.name}}Spider(scrapy.Spider):
 	name = "winwin_{{model.productType.name}}"
@@ -38,9 +39,17 @@ class Winwin{{model.productType.name}}Spider(scrapy.Spider):
 			name = tr.css('th::text').extract_first().strip()
 			value = tr.css('td::text').extract_first()
 			
+			value = unicodedata.normalize('NFD', value).encode('ascii', 'ignore')
+			name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore')
+			
 			for property in properties_list:
 				if property == name.lower():
 					{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+				elif property in name.lower() and {{model.productType.name.lower()}}[property]!= '':
+					{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+				elif '_' in property:
+					if property == name.lower().replace(' ','_'):
+						{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 		
 		yield {{model.productType.name.lower()}}
 					

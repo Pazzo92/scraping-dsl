@@ -1,6 +1,7 @@
 import scrapy
 from products.items import Laptop
 import re
+import unicodedata
 
 class GigatronLaptopSpider(scrapy.Spider):
 	name = "gigatron_Laptop"
@@ -27,6 +28,10 @@ class GigatronLaptopSpider(scrapy.Spider):
 		properties_list.append('ekran')
 		laptop['cena'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
 		laptop['naziv'] = response.css('h1::text').extract_first()
+		properties_list.append('memorija')
+		properties_list.append('baterija')
+		properties_list.append('operativni_sistem')
+		properties_list.append('graficka')
 		
 		table = response.css('div.main.clearfix table.product-specs')
 		for tr in table.css('tr'):
@@ -36,10 +41,19 @@ class GigatronLaptopSpider(scrapy.Spider):
 				value = link.strip()
 			else:
 				value = tr.css('td::text').extract_first()
+				
+			if value is not None and name is not None:
+				value = unicodedata.normalize('NFD', value).encode('ascii', 'ignore').decode('utf-8')
+				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
 			
 			for property in properties_list:
 				if property == name.lower():
 					laptop[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+				elif property in name.lower() and not hasattr(laptop, property):
+					laptop[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+				elif '_' in property:
+					if property == name.lower().replace(' ','_'):
+						laptop[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 		
 		yield laptop
 			

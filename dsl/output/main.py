@@ -9,7 +9,7 @@ def crawl():
     crawler_settings.setmodule(my_settings)
     process = CrawlerProcess(settings=crawler_settings)
     process.crawl(WinwinLaptopSpider)
-    process.crawl(GigatronLaptopSpider)
+#    process.crawl(GigatronLaptopSpider)
     process.start()
     
 if  __name__ =='__main__':
