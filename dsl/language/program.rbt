@@ -1,6 +1,6 @@
 ProductType = {
 				name "Laptop"
-				fields : "procesor", "ekran" , "cena" , "naziv"
+				fields : "procesor", "ekran" , "cena" , "naziv", "memorija", "baterija", "operativni sistem"
      		   }
 Criteria = {
 				"procesor" = "Intel Core i3-7130U"

@@ -45,7 +45,7 @@ class SpiderGenerator(BaseGenerator):
         
         self.copy_necessary_files(necessary_source_path, outputlocation)
         # post gen events
-        #self.call_post_gen_script(outputlocation)
+        self.generate_main(base_source_path,outputlocation)
 
     def generate_program(self, base_source_path, spiders_path, program_path):
         # program files
@@ -63,7 +63,9 @@ class SpiderGenerator(BaseGenerator):
             self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
                           {'model': self.model}, program_path + '/spiders')
             
-    def call_post_gen_script(self, base_path):
-        os.chdir(base_path)
-        scrapy.cmdline.execute(argv=['scrapy', 'crawl', 'winwin_'+self.model.productType.name.lower()])
-        scrapy.cmdline.execute(argv=['scrapy', 'crawl', 'gigatron_'+self.model.productType.name.lower()])
+    def generate_main(self, base_path, program_path):
+       
+        self.generate(base_path+'/tmain.tx','main.py', {'model': self.model}, program_path)
+        
+        os.chdir(program_path)
+        os.system('python ./main.py')
