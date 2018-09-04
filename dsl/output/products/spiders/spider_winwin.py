@@ -1,13 +1,13 @@
 import scrapy
-from products.items import Televizor
+from products.items import Mobilni_telefon
 import re
 import unicodedata
 
-class WinwinTelevizorSpider(scrapy.Spider):
-	name = "winwin_Televizor"
+class WinwinMobilni_telefonSpider(scrapy.Spider):
+	name = "winwin_Mobilni_telefon"
 	
 	def start_requests(self):
-		url = self.winwin_dictionary('televizor')
+		url = self.winwin_dictionary('mobilni_telefon')
 		return [scrapy.Request(url, callback=self.parse_links)]
 		
 	def parse_links(self,response):
@@ -21,17 +21,21 @@ class WinwinTelevizorSpider(scrapy.Spider):
 		
 	def parse(self,response):
 		
-		televizor = Televizor()
+		mobilni_telefon = Mobilni_telefon()
 		
 		properties_list = []
 		properties_list.append('rezolucija')
-		properties_list.append('dijagonala')
-		televizor['cena'] = response.css('div.price-box span.price::text').extract_first().strip()[:-5].replace(".","")
-		televizor['naziv'] = response.css('h1::text').extract_first()
-		properties_list.append('osvetljenje')
-		properties_list.append('ekran')
-		properties_list.append('boja')
-		properties_list.append('kontrast')
+		properties_list.append('operativni_sistem')
+		mobilni_telefon['cena'] = response.css('div.price-box span.price::text').extract_first().strip()[:-5].replace(".","")
+		mobilni_telefon['naziv'] = response.css('h1::text').extract_first()
+		properties_list.append('interna_memorija')
+		properties_list.append('procesor')
+		properties_list.append('opis_procesora')
+		properties_list.append('ram_memorija')
+		properties_list.append('radna_memorija')
+		properties_list.append('kamera')
+		properties_list.append('procesor')
+		mobilni_telefon['url'] = response.request.url
 		
 		table = response.css('div.product-panels-content table.data-table')
 		for tr in table.css('tr'):
@@ -44,17 +48,12 @@ class WinwinTelevizorSpider(scrapy.Spider):
 			
 			for property in properties_list:
 				if property == name.lower():
-					televizor[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
-				elif property in name.lower():
-					try:
-						televizor[property]
-					except KeyError:
-						televizor[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+					mobilni_telefon[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						televizor[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+						mobilni_telefon[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 		
-		yield televizor
+		yield mobilni_telefon
 					
 	def winwin_dictionary(self, x):
 			return {
@@ -80,7 +79,7 @@ class WinwinTelevizorSpider(scrapy.Spider):
         	'televizor' : 'https://www.winwin.rs/tv-audio-video/tv/televizori.html',
         	'mrezna_karta' : 'https://www.winwin.rs/mreze-sigurnosna-oprema/mrezne-kartice.html',
         	'ruter' : 'https://www.winwin.rs/mreze-sigurnosna-oprema/switch-i-ruter/lan-ruter.html',
-        	'mobilni_telefon' : 'https://www.winwin.rs/mobilni-i-fiksni-telefoni/mobilni-telefoni/mobilni-telefoni.html',
+        	'mobilni_telefon' : 'https://www.winwin.rs/mobilni-i-fiksni-telefoni/mobilni-telefoni/smart-mobilni-telefoni.html',
         	'telefon' : 'https://www.winwin.rs/mobilni-i-fiksni-telefoni/fiksni-telefoni/bezicni-telefoni.html',
         	'frizider' : 'https://www.winwin.rs/bela-tehnika/rashladni-uredaji/frizideri.html',
         	'zamrzivac' : 'https://www.winwin.rs/bela-tehnika/rashladni-uredaji/zamrzivaci.html',

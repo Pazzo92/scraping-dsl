@@ -29,7 +29,7 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 		{{model.productType.name.lower()}}['{{prop}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
 		{% elif prop.lower() == 'naziv' or prop.lower() == 'ime' %}
 		{{model.productType.name.lower()}}['{{prop}}'] = response.css('h1::text').extract_first()
-		{% elif prop.lower() == 'uri' or prop.lower() == 'link' %}
+		{% elif prop.lower() == 'url' or prop.lower() == 'link' %}
 		{{model.productType.name.lower()}}['{{prop}}'] = response.request.url
 		{% else %}	
 		properties_list.append('{{prop.lower()}}')
@@ -52,11 +52,6 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 			for property in properties_list:
 				if property == name.lower():
 					{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
-				elif property in name.lower():
-					try:
-						{{model.productType.name.lower()}}[property]
-					except KeyError:
-						{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
 						{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())

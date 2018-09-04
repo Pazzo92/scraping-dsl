@@ -27,41 +27,25 @@ class ProductsMiningPipeline(object):
 	
 	def process_item(self, item, spider):
 	{% for criteria in model.criteria %}
-		{% if loop.first %}
 		{% if criteria.matches%}
-		if(self.{{criteria.matches.field}}.replace(' ','') not in item['{{criteria.matches.field}}'].replace(' ','')
+		try:
+			if(self.{{criteria.matches.field}}.replace(' ','') not in item['{{criteria.matches.field}}'].replace(' ','')):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
 		{% elif criteria.greaterThan %}
-		if(self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}}'])
+		try:
+			if(self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}}'])):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
 		{% elif criteria.lessThan %}
-		if(self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}}'])	
-		{% endif %}
-		{% elif loop.last %}
-		{% if criteria.matches%}
-		or self.{{criteria.matches.field}}.replace(' ','') not in item['{{criteria.matches.field}}'].replace(' ','')):
-			raise DropItem("Failed to satisfy criteria: " % item)
-		else:
-			self.collection.insert(dict(item))
-			return item		
-		{% elif criteria.greaterThan %}
-		or self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}}'])):
-			raise DropItem("Failed to satisfy criteria: " % item)
-		else:
-			self.collection.insert(dict(item))
-			return item		
-		{% elif criteria.lessThan %}
-		or self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}}'])):
-			raise DropItem("Failed to satisfy criteria: " % item)
-		else:
-			self.collection.insert(dict(item))
-			return item		
-		{% endif %}
-		{% else %}
-		{% if criteria.matches%}
-		or self.{{criteria.matches.field}}.replace(' ','') not in item['{{criteria.matches.field}}'].replace(' ','')
-		{% elif criteria.greaterThan %}
-		or self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}}'])
-		{% elif criteria.lessThan %}
-		or self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}}'])		
-		{% endif %}
+		try:
+			if(self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}}'])):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
 		{% endif %}
 	{% endfor %}
+		self.collection.insert(dict(item))
+		return item	

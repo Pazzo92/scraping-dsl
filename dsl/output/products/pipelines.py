@@ -5,11 +5,12 @@ import pymongo
 
 class ProductsMiningPipeline(object):
 
-	dijagonala='40' 
-	ekran='LED' 
-	min_cena = 30000
-	max_cena = 40000
-	boja='Crna' 
+	opis_procesora='Octa-core' 
+	procesor='Octa-core' 
+	interna_memorija='64GB' 
+	min_cena = 60000
+	max_cena = 80000
+	operativni_sistem='Android' 
 	
 	def __init__(self):
 		settings = Settings()
@@ -22,12 +23,35 @@ class ProductsMiningPipeline(object):
 		self.collection = db[settings['MONGODB_COLLECTION']]
 	
 	def process_item(self, item, spider):
-		if(self.dijagonala.replace(' ','') not in item['dijagonala'].replace(' ','')
-		or self.ekran.replace(' ','') not in item['ekran'].replace(' ','')
-		or self.max_cena < float(item['cena'])
-		or self.min_cena > float(item['cena'])		
-		or self.boja.replace(' ','') not in item['boja'].replace(' ','')):
-			raise DropItem("Failed to satisfy criteria: " % item)
-		else:
-			self.collection.insert(dict(item))
-			return item		
+		try:
+			if(self.opis_procesora.replace(' ','') not in item['opis_procesora'].replace(' ','')):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
+		try:
+			if(self.procesor.replace(' ','') not in item['procesor'].replace(' ','')):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
+		try:
+			if(self.interna_memorija.replace(' ','') not in item['interna_memorija'].replace(' ','')):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
+		try:
+			if(self.max_cena < float(item['cena'])):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
+		try:
+			if(self.min_cena > float(item['cena'])):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
+		try:
+			if(self.operativni_sistem.replace(' ','') not in item['operativni_sistem'].replace(' ','')):
+				raise DropItem("Failed to satisfy criteria: " % item)
+		except KeyError:
+				pass
+		self.collection.insert(dict(item))
+		return item	

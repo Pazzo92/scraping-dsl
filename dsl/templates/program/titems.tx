@@ -2,5 +2,5 @@ import scrapy
 
 class {{model.productType.name}}(scrapy.Item):
 	{% for prop in model.productType.properties %}
-	{{prop}} = scrapy.Field()
+	{{prop}} = scrapy.Field(optional=True)
 	{% endfor %}

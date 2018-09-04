@@ -1,0 +1,12 @@
+ProductType = {
+				name "Mobilni_telefon"
+				fields : "rezolucija", "operativni_sistem" , "cena" , "naziv", "interna_memorija", "procesor", "opis_procesora", "ram_memorija","radna_memorija", "kamera", "procesor", "url"
+     		   }
+Criteria = {
+				"opis_procesora" = "Octa-core"
+				"procesor" = "Octa-core"
+				"interna_memorija" = "64GB"
+				"cena" > 60000
+				"cena" < 80000
+				"operativni_sistem" = "Android"
+			}

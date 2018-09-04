@@ -1,13 +1,13 @@
 import scrapy
-from products.items import Televizor
+from products.items import Mobilni_telefon
 import re
 import unicodedata
 
-class GigatronTelevizorSpider(scrapy.Spider):
-	name = "gigatron_Televizor"
+class GigatronMobilni_telefonSpider(scrapy.Spider):
+	name = "gigatron_Mobilni_telefon"
 	
 	def start_requests(self):
-		url = self.gigatron_dictionary('televizor')
+		url = self.gigatron_dictionary('mobilni_telefon')
 		return [scrapy.Request(url, callback=self.get_number_of_items)]
 		
 	def get_number_of_items(self, response):
@@ -21,17 +21,30 @@ class GigatronTelevizorSpider(scrapy.Spider):
 		
 	def parse(self,response):
 		
-		televizor = Televizor()
+		mobilni_telefon = Mobilni_telefon()
 		
 		properties_list = []
+	
 		properties_list.append('rezolucija')
-		properties_list.append('dijagonala')
-		televizor['cena'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
-		televizor['naziv'] = response.css('h1::text').extract_first()
-		properties_list.append('osvetljenje')
-		properties_list.append('ekran')
-		properties_list.append('boja')
-		properties_list.append('kontrast')
+	
+		properties_list.append('operativni_sistem')
+		mobilni_telefon['cena'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
+		mobilni_telefon['naziv'] = response.css('h1::text').extract_first()
+	
+		properties_list.append('interna_memorija')
+	
+		properties_list.append('procesor')
+	
+		properties_list.append('opis_procesora')
+	
+		properties_list.append('ram_memorija')
+	
+		properties_list.append('radna_memorija')
+	
+		properties_list.append('kamera')
+	
+		properties_list.append('procesor')
+		mobilni_telefon['url'] = response.request.url
 		
 		table = response.css('div.main.clearfix table.product-specs')
 		for tr in table.css('tr'):
@@ -48,17 +61,12 @@ class GigatronTelevizorSpider(scrapy.Spider):
 			
 			for property in properties_list:
 				if property == name.lower():
-					televizor[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
-				elif property in name.lower():
-					try:
-						televizor[property]
-					except KeyError:
-						televizor[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+					mobilni_telefon[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						televizor[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+						mobilni_telefon[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 		
-		yield televizor
+		yield mobilni_telefon
 			
 	def gigatron_dictionary(self, x):
 			return {

@@ -29,7 +29,7 @@ class Winwin{{model.productType.name}}Spider(scrapy.Spider):
 		{{model.productType.name.lower()}}['{{prop}}'] = response.css('div.price-box span.price::text').extract_first().strip()[:-5].replace(".","")
 		{% elif prop.lower() == 'naziv' or prop.lower() == 'ime' %}
 		{{model.productType.name.lower()}}['{{prop}}'] = response.css('h1::text').extract_first()
-		{% elif prop.lower() == 'uri' or prop.lower() == 'link' %}
+		{% elif prop.lower() == 'url' or prop.lower() == 'link' %}
 		{{model.productType.name.lower()}}['{{prop}}'] = response.request.url
 		{% else %}
 		properties_list.append('{{prop.lower()}}')
@@ -48,11 +48,6 @@ class Winwin{{model.productType.name}}Spider(scrapy.Spider):
 			for property in properties_list:
 				if property == name.lower():
 					{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
-				elif property in name.lower():
-					try:
-						{{model.productType.name.lower()}}[property]
-					except KeyError:
-						{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
 						{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
@@ -83,7 +78,7 @@ class Winwin{{model.productType.name}}Spider(scrapy.Spider):
         	'televizor' : 'https://www.winwin.rs/tv-audio-video/tv/televizori.html',
         	'mrezna_karta' : 'https://www.winwin.rs/mreze-sigurnosna-oprema/mrezne-kartice.html',
         	'ruter' : 'https://www.winwin.rs/mreze-sigurnosna-oprema/switch-i-ruter/lan-ruter.html',
-        	'mobilni_telefon' : 'https://www.winwin.rs/mobilni-i-fiksni-telefoni/mobilni-telefoni/mobilni-telefoni.html',
+        	'mobilni_telefon' : 'https://www.winwin.rs/mobilni-i-fiksni-telefoni/mobilni-telefoni/smart-mobilni-telefoni.html',
         	'telefon' : 'https://www.winwin.rs/mobilni-i-fiksni-telefoni/fiksni-telefoni/bezicni-telefoni.html',
         	'frizider' : 'https://www.winwin.rs/bela-tehnika/rashladni-uredaji/frizideri.html',
         	'zamrzivac' : 'https://www.winwin.rs/bela-tehnika/rashladni-uredaji/zamrzivaci.html',
