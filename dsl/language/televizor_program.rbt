@@ -1,0 +1,11 @@
+ProductType = {
+				name "Televizor"
+				fields : "rezolucija", "dijagonala" , "cena" , "naziv", "osvetljenje", "ekran", "boja", "kontrast", "url"
+     		   }
+Criteria = {
+				"dijagonala" = "40"
+				"ekran" = "LED"
+				"cena" > 30000
+				"cena" < 40000
+				"boja" = "Crna"
+			}

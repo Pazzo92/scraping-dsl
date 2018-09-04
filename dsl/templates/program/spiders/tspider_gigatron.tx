@@ -29,7 +29,9 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 		{{model.productType.name.lower()}}['{{prop}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
 		{% elif prop.lower() == 'naziv' or prop.lower() == 'ime' %}
 		{{model.productType.name.lower()}}['{{prop}}'] = response.css('h1::text').extract_first()
-		{% else %}
+		{% elif prop.lower() == 'uri' or prop.lower() == 'link' %}
+		{{model.productType.name.lower()}}['{{prop}}'] = response.request.url
+		{% else %}	
 		properties_list.append('{{prop.lower()}}')
 		{% endif %}
 		{% endfor %}

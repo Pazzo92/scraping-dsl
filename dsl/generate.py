@@ -12,7 +12,7 @@ from dsl.root import SRC_DIR
 
 def main(location="", filename="", output="", debug=False):
 
-    model = execute(os.path.join(SRC_DIR, "language"), 'real_deal.tx', 'program.rbt', debug, debug)
+    model = execute(os.path.join(SRC_DIR, "language"), 'real_deal.tx', 'televizor_program.rbt', debug, debug)
 
     generator = SpiderGenerator(model)
     generator.generate_application(output)
