@@ -23,12 +23,12 @@ class ProductsMiningPipeline(object):
 		self.collection = db[settings['MONGODB_COLLECTION']]
 	
 	def process_item(self, item, spider):
-		if(self.procesor not in item['procesor']
-		or self.ekran not in item['ekran']
+		if(self.procesor.replace(' ','') not in item['procesor'].replace(' ','')
+		or self.ekran.replace(' ','') not in item['ekran'].replace(' ','')
 		or self.max_cena < float(item['cena'])
 		or self.min_cena > float(item['cena'])		
-		or self.memorija not in item['memorija']
-		or self.graficka not in item['graficka']):
+		or self.memorija.replace(' ','') not in item['memorija'].replace(' ','')
+		or self.graficka.replace(' ','') not in item['graficka'].replace(' ','')):
 			raise DropItem("Failed to satisfy criteria: " % item)
 		else:
 			self.collection.insert(dict(item))

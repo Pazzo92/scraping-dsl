@@ -9,3 +9,4 @@ class Laptop(scrapy.Item):
 	baterija = scrapy.Field()
 	operativni_sistem = scrapy.Field()
 	graficka = scrapy.Field()
+	boja = scrapy.Field()

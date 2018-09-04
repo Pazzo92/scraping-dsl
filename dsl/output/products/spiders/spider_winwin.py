@@ -13,11 +13,11 @@ class WinwinLaptopSpider(scrapy.Spider):
 	def parse_links(self,response):
 		links = response.xpath("//*/h2[@class='product-name']/a/@href").extract()
 		for link in links:
-			yield scrapy.Request('https://www.winwin.rs/laptop-i-tablet-racunari/laptop-notebook-racunari/laptop-hp-pavilion-14-bk008nm-2nq60ea-14-fhd-intel-i5-7200u-8gb-1tb-gf-940mx-2-gb-hdm-8612215.html')	
+			yield scrapy.Request(link)	
 		
-	#	next_page = response.xpath("//*/a[@class='next i-next']/@href").extract_first()
-	#	if next_page is not None:
-	#		yield scrapy.Request(next_page, callback=self.parse_links)
+		next_page = response.xpath("//*/a[@class='next i-next']/@href").extract_first()
+		if next_page is not None:
+			yield scrapy.Request(next_page, callback=self.parse_links)
 		
 	def parse(self,response):
 		
@@ -32,6 +32,7 @@ class WinwinLaptopSpider(scrapy.Spider):
 		properties_list.append('baterija')
 		properties_list.append('operativni_sistem')
 		properties_list.append('graficka')
+		properties_list.append('boja')
 		
 		table = response.css('div.product-panels-content table.data-table')
 		for tr in table.css('tr'):
@@ -41,13 +42,15 @@ class WinwinLaptopSpider(scrapy.Spider):
 			if value is not None and name is not None:
 				value = unicodedata.normalize('NFD', value).encode('ascii', 'ignore').decode('utf-8')
 				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
-				
+			
 			for property in properties_list:
 				if property == name.lower():
 					laptop[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif property in name.lower():
-					print(not laptop[property])
-					laptop[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+					try:
+						laptop[property]
+					except KeyError:
+						laptop[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
 						laptop[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())

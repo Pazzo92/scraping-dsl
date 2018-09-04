@@ -43,14 +43,18 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 			else:
 				value = tr.css('td::text').extract_first()
 				
-			value = unicodedata.normalize('NFD', value).encode('ascii', 'ignore')
-			name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore')
+			if value is not None and name is not None:
+				value = unicodedata.normalize('NFD', value).encode('ascii', 'ignore').decode('utf-8')
+				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
 			
 			for property in properties_list:
 				if property == name.lower():
 					{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
-				elif property in name.lower() and {{model.productType.name.lower()}}[property]!= '':
-					{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+				elif property in name.lower():
+					try:
+						{{model.productType.name.lower()}}[property]
+					except KeyError:
+						{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
 						{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
@@ -59,7 +63,39 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 			
 	def gigatron_dictionary(self, x):
 			return {
-        	'laptop': 'https://www.gigatron.rs/laptop_racunari'
+        	'laptop': 'https://www.gigatron.rs/laptop_racunari',
+        	'tablet': 'https://www.gigatron.rs/tablet_racunari',
+        	'racunar': 'https://www.gigatron.rs/gigatron_racunari',
+        	'procesor': 'https://www.gigatron.rs/procesori',
+        	'maticna_ploca': 'https://www.gigatron.rs/maticne_ploce',
+        	'memorija': 'https://www.gigatron.rs/memorije',
+        	'hard_disk': 'https://www.gigatron.rs/hard_diskovi',
+        	'SSD': 'https://www.gigatron.rs/ssd',
+        	'monitor' : 'https://www.gigatron.rs/monitori',
+        	'tastatura' : 'https://www.gigatron.rs/tastature',
+        	'mis': 'https://www.gigatron.rs/misevi',
+        	'slusalice' : 'https://www.gigatron.rs/slusalice',
+        	'memorijska_kartica' : 'https://www.gigatron.rs/memorijske_kartice', 
+        	'USB_flash' : 'https://www.gigatron.rs/usb_flash_memorija',
+        	'stampac' : 'https://www.gigatron.rs/stampaci',
+        	'skener' : 'https://www.gigatron.rs/skeneri',
+        	'sony' : 'https://www.gigatron.rs/sony',
+        	'xbox' : 'https://www.gigatron.rs/xbox',
+        	'nintendo' : 'https://www.gigatron.rs/nintendo',
+        	'televizor' : 'https://www.gigatron.rs/televizori',
+        	'mrezna_karta' : 'https://www.gigatron.rs/mrezne_karte_i_adapteri',
+        	'ruter' : 'https://www.gigatron.rs/ruteri',
+        	'mobilni_telefon' : 'https://www.gigatron.rs/mobilni_telefoni',
+        	'telefon' : 'https://www.gigatron.rs/telefoni',
+        	'frizider' : 'https://www.gigatron.rs/frizideri',
+        	'zamrzivac' : 'https://www.gigatron.rs/zamrzivaci',
+        	'masina_za_ves' : 'https://www.gigatron.rs/masine_za_ves',
+        	'sporet' : 'https://www.gigatron.rs/sporeti_ploce_i_rerne',
+        	'mikrotalasne' : 'https://www.gigatron.rs/mikrotalasne_rerne',
+        	'klima_uredjaj' : 'https://www.gigatron.rs/klima_uredjaji_i_oprema',
+        	'bojler' : 'https://www.gigatron.rs/bojleri',
+        	'fotoaparat' : 'https://www.gigatron.rs/digitalni_fotoaparati',
+        	'gitara' : 'https://www.gigatron.rs/gitare'
         	}.get(x, '')
         	
         
