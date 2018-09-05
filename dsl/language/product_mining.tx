@@ -1,4 +1,4 @@
-import sample
+import type
 
 Program:
 	"ProductType" "=" productType = ProductType
