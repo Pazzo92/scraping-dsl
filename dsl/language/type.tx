@@ -1,3 +1,7 @@
 ProductType:
+	productType *= Type
+;
+
+Type:
 	name = ID "(" properties *= ID[","] ")" 
 ;
