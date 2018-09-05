@@ -1,1 +1,1 @@
-Laptop (procesor, ekran , cena , naziv, memorija, baterija, operativni_sistem, graficka, boja)
+Laptop (procesor, ekran , cena , naziv, memorija(radna_memorija, RAM), baterija, operativni_sistem, graficka, boja)

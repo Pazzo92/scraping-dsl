@@ -15,8 +15,8 @@ def main(location="", filename="", output="", debug=False):
     model_type = execute(os.path.join(SRC_DIR, "language"), 'type.tx', 'types.rbt', debug, debug)
     model = execute(os.path.join(SRC_DIR, "language"), 'products_mining.tx', 'laptop_program.rbt', debug, debug)
     
-    generator = SpiderGenerator(model)
-    generator.generate_application(output)
+#    generator = SpiderGenerator(model)
+#    generator.generate_application(output)
     
     
 

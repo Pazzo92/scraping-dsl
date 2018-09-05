@@ -3,5 +3,13 @@ ProductType:
 ;
 
 Type:
-	name = ID "(" properties *= ID[","] ")" 
+	name = ID "(" properties *= Property[","] ")" 
+;
+
+Property:
+	property = ID aliases= Aliases? 
+;
+
+Aliases:
+	"(" alias*= ID[","] ")"
 ;
