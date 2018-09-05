@@ -35,13 +35,13 @@ class ProductsMiningPipeline(object):
 				pass
 		{% elif criteria.greaterThan %}
 		try:
-			if(self.max_{{criteria.greaterThan.field}} < float(item['{{criteria.greaterThan.field}}'])):
+			if(self.min_{{criteria.greaterThan.field}} > float(item['{{criteria.greaterThan.field}}'])):
 				raise DropItem("Failed to satisfy criteria: " % item)
 		except KeyError:
 				pass
 		{% elif criteria.lessThan %}
 		try:
-			if(self.min_{{criteria.lessThan.field}} > float(item['{{criteria.lessThan.field}}'])):
+			if(self.max_{{criteria.lessThan.field}} < float(item['{{criteria.lessThan.field}}'])):
 				raise DropItem("Failed to satisfy criteria: " % item)
 		except KeyError:
 				pass

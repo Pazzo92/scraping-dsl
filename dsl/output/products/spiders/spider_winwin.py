@@ -1,13 +1,13 @@
 import scrapy
-from products.items import Mobilni_telefon
+from products.items import Gitara
 import re
 import unicodedata
 
-class WinwinMobilni_telefonSpider(scrapy.Spider):
-	name = "winwin_Mobilni_telefon"
+class WinwinGitaraSpider(scrapy.Spider):
+	name = "winwin_Gitara"
 	
 	def start_requests(self):
-		url = self.winwin_dictionary('mobilni_telefon')
+		url = self.winwin_dictionary('gitara')
 		return [scrapy.Request(url, callback=self.parse_links)]
 		
 	def parse_links(self,response):
@@ -21,21 +21,19 @@ class WinwinMobilni_telefonSpider(scrapy.Spider):
 		
 	def parse(self,response):
 		
-		mobilni_telefon = Mobilni_telefon()
+		gitara = Gitara()
 		
 		properties_list = []
-		properties_list.append('rezolucija')
-		properties_list.append('operativni_sistem')
-		mobilni_telefon['cena'] = response.css('div.price-box span.price::text').extract_first().strip()[:-5].replace(".","")
-		mobilni_telefon['naziv'] = response.css('h1::text').extract_first()
-		properties_list.append('interna_memorija')
-		properties_list.append('procesor')
-		properties_list.append('opis_procesora')
-		properties_list.append('ram_memorija')
-		properties_list.append('radna_memorija')
-		properties_list.append('kamera')
-		properties_list.append('procesor')
-		mobilni_telefon['url'] = response.request.url
+		gitara['url'] = response.request.url
+		properties_list.append('tip')
+		properties_list.append('telo')
+		gitara['cena'] = response.css('div.price-box span.price::text').extract_first().strip()[:-5].replace(".","")
+		gitara['naziv'] = response.css('h1::text').extract_first()
+		properties_list.append('vrat')
+		properties_list.append('boja')
+		properties_list.append('opis')
+		properties_list.append('model')
+		properties_list.append('boja')
 		
 		table = response.css('div.product-panels-content table.data-table')
 		for tr in table.css('tr'):
@@ -48,12 +46,12 @@ class WinwinMobilni_telefonSpider(scrapy.Spider):
 			
 			for property in properties_list:
 				if property == name.lower():
-					mobilni_telefon[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+					gitara[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						mobilni_telefon[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+						gitara[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 		
-		yield mobilni_telefon
+		yield gitara
 					
 	def winwin_dictionary(self, x):
 			return {

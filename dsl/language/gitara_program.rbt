@@ -1,0 +1,8 @@
+ProductType = {
+				name "Gitara"
+				fields :  "url", "tip", "telo" , "cena" , "naziv", "vrat", "boja", "opis", "model", "boja"
+     		   }
+Criteria = {
+				"tip" = "Klasicna"
+				"cena" < 45000
+			}

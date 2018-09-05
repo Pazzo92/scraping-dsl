@@ -1,13 +1,13 @@
 import scrapy
-from products.items import Mobilni_telefon
+from products.items import Gitara
 import re
 import unicodedata
 
-class GigatronMobilni_telefonSpider(scrapy.Spider):
-	name = "gigatron_Mobilni_telefon"
+class GigatronGitaraSpider(scrapy.Spider):
+	name = "gigatron_Gitara"
 	
 	def start_requests(self):
-		url = self.gigatron_dictionary('mobilni_telefon')
+		url = self.gigatron_dictionary('gitara')
 		return [scrapy.Request(url, callback=self.get_number_of_items)]
 		
 	def get_number_of_items(self, response):
@@ -21,30 +21,26 @@ class GigatronMobilni_telefonSpider(scrapy.Spider):
 		
 	def parse(self,response):
 		
-		mobilni_telefon = Mobilni_telefon()
+		gitara = Gitara()
 		
 		properties_list = []
+		gitara['url'] = response.request.url
 	
-		properties_list.append('rezolucija')
+		properties_list.append('tip')
 	
-		properties_list.append('operativni_sistem')
-		mobilni_telefon['cena'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
-		mobilni_telefon['naziv'] = response.css('h1::text').extract_first()
+		properties_list.append('telo')
+		gitara['cena'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
+		gitara['naziv'] = response.css('h1::text').extract_first()
 	
-		properties_list.append('interna_memorija')
+		properties_list.append('vrat')
 	
-		properties_list.append('procesor')
+		properties_list.append('boja')
 	
-		properties_list.append('opis_procesora')
+		properties_list.append('opis')
 	
-		properties_list.append('ram_memorija')
+		properties_list.append('model')
 	
-		properties_list.append('radna_memorija')
-	
-		properties_list.append('kamera')
-	
-		properties_list.append('procesor')
-		mobilni_telefon['url'] = response.request.url
+		properties_list.append('boja')
 		
 		table = response.css('div.main.clearfix table.product-specs')
 		for tr in table.css('tr'):
@@ -61,12 +57,12 @@ class GigatronMobilni_telefonSpider(scrapy.Spider):
 			
 			for property in properties_list:
 				if property == name.lower():
-					mobilni_telefon[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+					gitara[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						mobilni_telefon[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+						gitara[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
 		
-		yield mobilni_telefon
+		yield gitara
 			
 	def gigatron_dictionary(self, x):
 			return {
