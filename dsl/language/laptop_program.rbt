@@ -1,6 +1,6 @@
 ProductType = {
 				name "Laptop"
-				fields : "procesor", "ekran" , "cena" , "naziv", "memorija", "baterija", "operativni_sistem", "graficka", "boja" , "url"
+				fields : "procesor", "ekran" , "cena" , "naziv", "memorija", "baterija", "operativni_sistem", "graficka", "boja"
      		   }
 Criteria = {
 				"procesor" = "Intel Core i5"

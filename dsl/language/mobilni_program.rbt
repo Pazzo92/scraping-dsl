@@ -1,6 +1,6 @@
 ProductType = {
 				name "Mobilni_telefon"
-				fields : "rezolucija", "operativni_sistem" , "cena" , "naziv", "interna_memorija", "procesor", "opis_procesora", "ram_memorija","radna_memorija", "kamera", "procesor", "url"
+				fields : "rezolucija", "operativni_sistem" , "cena" , "naziv", "interna_memorija", "procesor", "opis_procesora", "ram_memorija","radna_memorija", "kamera", "procesor"
      		   }
 Criteria = {
 				"opis_procesora" = "Octa-core"

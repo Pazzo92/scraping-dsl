@@ -1,6 +1,6 @@
 ProductType = {
 				name "Televizor"
-				fields : "rezolucija", "dijagonala" , "cena" , "naziv", "osvetljenje", "ekran", "boja", "kontrast", "url"
+				fields : "rezolucija", "dijagonala" , "cena" , "naziv", "osvetljenje", "ekran", "boja", "kontrast"
      		   }
 Criteria = {
 				"dijagonala" = "40"
