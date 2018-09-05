@@ -8,8 +8,8 @@ from dsl.root import BASE_PATH, SRC_DIR
 
 
 class SpiderGenerator(BaseGenerator):
-    def __init__(self, model):
-        BaseGenerator.__init__(self, model)
+    def __init__(self, model, model_main):
+        BaseGenerator.__init__(self, model, model_main)
         pass
 
     @staticmethod
@@ -50,22 +50,24 @@ class SpiderGenerator(BaseGenerator):
     def generate_program(self, base_source_path, spiders_path, program_path):
         # program files
         
-        file_gen_list = {'__init__', 'items', 'middlewares', 'pipelines', 'settings'}
+        file_gen_list = {'__init__', 'items', 'middlewares', 'settings'}
 
         # generate the basic files
         for e in file_gen_list:
             self.generate(base_source_path + '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
-                          {'model': self.model}, program_path)
+                          {'model': self.model, 'model_main': self.model_main}, program_path)
+            
+        self.generate(base_source_path+'/tpipelines.tx','pipelines.py', {'model': self.model_main}, program_path)
             
         spiders_file_gen_list = {'__init__', 'spider_gigatron', 'spider_winwin'}
             
         for e in spiders_file_gen_list:
             self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
-                          {'model': self.model}, program_path + '/spiders')
+                          {'model': self.model, 'model_main': self.model_main}, program_path + '/spiders')
             
     def generate_main(self, base_path, program_path):
        
-        self.generate(base_path+'/tmain.tx','main.py', {'model': self.model}, program_path)
+        self.generate(base_path+'/tmain.tx','main.py', {'model_main': self.model_main}, program_path)
         
         os.chdir(program_path)
         os.system('python ./main.py')

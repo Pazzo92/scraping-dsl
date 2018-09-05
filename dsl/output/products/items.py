@@ -1,13 +1,11 @@
 import scrapy
 
-class Gitara(scrapy.Item):
-	url = scrapy.Field(optional=True)
-	tip = scrapy.Field(optional=True)
-	telo = scrapy.Field(optional=True)
-	cena = scrapy.Field(optional=True)
+class Televizor(scrapy.Item):
 	naziv = scrapy.Field(optional=True)
-	vrat = scrapy.Field(optional=True)
+	cena = scrapy.Field(optional=True)
+	url = scrapy.Field(optional=True)
+	dijagonala = scrapy.Field(optional=True)
+	ekran = scrapy.Field(optional=True)
 	boja = scrapy.Field(optional=True)
-	opis = scrapy.Field(optional=True)
-	model = scrapy.Field(optional=True)
-	boja = scrapy.Field(optional=True)
+	rezolucija = scrapy.Field(optional=True)
+	zvucnici = scrapy.Field(optional=True)

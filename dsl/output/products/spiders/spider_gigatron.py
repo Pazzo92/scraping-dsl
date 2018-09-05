@@ -1,13 +1,13 @@
 import scrapy
-from products.items import Gitara
 import re
 import unicodedata
+from products.items import Televizor
 
-class GigatronGitaraSpider(scrapy.Spider):
-	name = "gigatron_Gitara"
+class GigatronTelevizorSpider(scrapy.Spider):
+	name = "gigatron_televizor"
 	
 	def start_requests(self):
-		url = self.gigatron_dictionary('gitara')
+		url = self.gigatron_dictionary('televizor')
 		return [scrapy.Request(url, callback=self.get_number_of_items)]
 		
 	def get_number_of_items(self, response):
@@ -17,30 +17,35 @@ class GigatronGitaraSpider(scrapy.Spider):
 	def parse_links(self,response):
 		links = response.xpath("//*/h4/a[@class='product-name']/@href").extract()
 		for link in links:
-			yield scrapy.Request(link)
+			yield scrapy.Request('https://www.gigatron.rs/televizori/samsung_ue32m4002-104411')
 		
 	def parse(self,response):
 		
-		gitara = Gitara()
+		televizor = Televizor()
 		
 		properties_list = []
-		gitara['url'] = response.request.url
-	
-		properties_list.append('tip')
-	
-		properties_list.append('telo')
-		gitara['cena'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
-		gitara['naziv'] = response.css('h1::text').extract_first()
-	
-		properties_list.append('vrat')
-	
+		aliases_dict = {}
+		televizor['naziv'] = response.css('h1::text').extract_first()
+		televizor['cena'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
+		televizor['url'] = response.request.url
+		properties_list.append('dijagonala')
+		aliases = []
+		aliases.append('dijagonala_ekrana')
+		aliases_dict['dijagonala'] = aliases
+		properties_list.append('ekran')
+		aliases = []
+		aliases.append('tip_ekrana')
+		aliases_dict['ekran'] = aliases
 		properties_list.append('boja')
-	
-		properties_list.append('opis')
-	
-		properties_list.append('model')
-	
-		properties_list.append('boja')
+		aliases = []
+		aliases_dict['boja'] = aliases
+		properties_list.append('rezolucija')
+		aliases = []
+		aliases_dict['rezolucija'] = aliases
+		properties_list.append('zvucnici')
+		aliases = []
+		aliases.append('zvuk')
+		aliases_dict['zvucnici'] = aliases
 		
 		table = response.css('div.main.clearfix table.product-specs')
 		for tr in table.css('tr'):
@@ -56,14 +61,14 @@ class GigatronGitaraSpider(scrapy.Spider):
 				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
 			
 			for property in properties_list:
-				if property == name.lower():
-					gitara[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+				if property == name.lower() or name.lower().replace(' ','_') in aliases_dict[property]:
+					televizor[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						gitara[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+						televizor[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
 		
-		yield gitara
-			
+		yield televizor
+ 
 	def gigatron_dictionary(self, x):
 			return {
         	'laptop': 'https://www.gigatron.rs/laptop_racunari',
@@ -100,5 +105,5 @@ class GigatronGitaraSpider(scrapy.Spider):
         	'fotoaparat' : 'https://www.gigatron.rs/digitalni_fotoaparati',
         	'gitara' : 'https://www.gigatron.rs/gitare'
         	}.get(x, '')
-        	
+ 	
         

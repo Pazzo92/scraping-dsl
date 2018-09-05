@@ -5,7 +5,7 @@ import pymongo
 
 class ProductsMiningPipeline(object):
 
-	{% for criteria in model.criteria %}
+	{% for criteria in model.query.criteria %}
 	{% if criteria.matches%}
 	{{criteria.matches.field}}={% if criteria.matches.value is string %}'{{criteria.matches.value}}'{% else %}{{criteria.matches.value}}{% endif %} 
 	{% elif criteria.greaterThan %}
@@ -26,25 +26,17 @@ class ProductsMiningPipeline(object):
 		self.collection = db[settings['MONGODB_COLLECTION']]
 	
 	def process_item(self, item, spider):
-	{% for criteria in model.criteria %}
+	{% for criteria in model.query.criteria %}
 		{% if criteria.matches%}
-		try:
-			if(self.{{criteria.matches.field}}.replace(' ','') not in item['{{criteria.matches.field}}'].replace(' ','')):
+		if(self.{{criteria.matches.field}}.replace(' ','').lower() not in item['{{criteria.matches.field}}'].replace(' ','').lower()):
 				raise DropItem("Failed to satisfy criteria: " % item)
-		except KeyError:
-				pass
 		{% elif criteria.greaterThan %}
-		try:
-			if(self.min_{{criteria.greaterThan.field}} > float(item['{{criteria.greaterThan.field}}'])):
+		if(self.min_{{criteria.greaterThan.field}} > float(item['{{criteria.greaterThan.field}}'])):
 				raise DropItem("Failed to satisfy criteria: " % item)
-		except KeyError:
-				pass
 		{% elif criteria.lessThan %}
-		try:
-			if(self.max_{{criteria.lessThan.field}} < float(item['{{criteria.lessThan.field}}'])):
+		if(self.max_{{criteria.lessThan.field}} < float(item['{{criteria.lessThan.field}}'])):
 				raise DropItem("Failed to satisfy criteria: " % item)
-		except KeyError:
-				pass
+
 		{% endif %}
 	{% endfor %}
 		self.collection.insert(dict(item))

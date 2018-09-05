@@ -1,1 +1,1 @@
-find Laptop where cena < 50000 and ekran = 15.6 and cena > 90000 and memorija = '8GB' and graficka = GeForce and procesor = 'Intel Core i5'
+find Laptop where cena > 40000 and ekran = '15.6"' and cena < 90000 and memorija = '4GB' and graficka_kartica = AMDRadeon and procesor = 'Intel Core i3'

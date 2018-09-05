@@ -1,1 +1,5 @@
-Laptop (procesor, ekran , cena , naziv, memorija(radna_memorija, RAM), baterija, operativni_sistem, graficka, boja)
+Laptop (procesor, ekran , cena , naziv, memorija(radna_memorija, ram), hard_disk(hdd1,ssd),baterija, operativni_sistem, graficka_kartica(graficka_karta), boja)
+Frizider (tip, kapacitet_frizidera , cena , naziv, sirina, visina, dubina, energetski_razred, potrosnja, boja , url)
+Mobilni_telefon (naziv, cena, url, velicina_ekrana(dijagonala_ekrana), rezolucija (rezolucija_ekrana), operativni_sistem, procesor(opis_procesora), interna_memorija, ram (radna_memorija,ram_memorija))
+Gitara (url, tip, telo , cena , naziv, vrat, boja, opis, model, boja)
+Televizor (naziv, cena, url, dijagonala (dijagonala_ekrana), ekran(tip_ekrana), boja, rezolucija, zvucnici(zvuk))

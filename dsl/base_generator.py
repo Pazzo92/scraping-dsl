@@ -14,9 +14,11 @@ from jinja2.loaders import PackageLoader
 
 class BaseGenerator:
     model = object
+    model_main = object
 
-    def __init__(self, model):
+    def __init__(self, model, model_main):
         self.model = model
+        self.model_main = model_main
         pass
 
     def generate(self, template_name, output_name, render_vars, output_dir):

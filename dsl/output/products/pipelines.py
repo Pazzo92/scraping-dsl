@@ -5,8 +5,9 @@ import pymongo
 
 class ProductsMiningPipeline(object):
 
-	tip='Klasicna' 
-	max_cena = 45000
+	max_cena = 100000
+	dijagonala='32"' 
+	naziv='Samsung' 
 	
 	def __init__(self):
 		settings = Settings()
@@ -19,15 +20,12 @@ class ProductsMiningPipeline(object):
 		self.collection = db[settings['MONGODB_COLLECTION']]
 	
 	def process_item(self, item, spider):
-		try:
-			if(self.tip.replace(' ','') not in item['tip'].replace(' ','')):
+		if(self.max_cena < float(item['cena'])):
 				raise DropItem("Failed to satisfy criteria: " % item)
-		except KeyError:
-				pass
-		try:
-			if(self.max_cena < float(item['cena'])):
+
+		if(self.dijagonala.replace(' ','').lower() not in item['dijagonala'].replace(' ','').lower()):
 				raise DropItem("Failed to satisfy criteria: " % item)
-		except KeyError:
-				pass
+		if(self.naziv.replace(' ','').lower() not in item['naziv'].replace(' ','').lower()):
+				raise DropItem("Failed to satisfy criteria: " % item)
 		self.collection.insert(dict(item))
 		return item	

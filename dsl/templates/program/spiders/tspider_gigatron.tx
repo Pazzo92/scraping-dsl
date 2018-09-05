@@ -1,13 +1,15 @@
 import scrapy
-from products.items import {{model.productType.name}}
 import re
 import unicodedata
+{% for type in model.productType %}
+{% if type.name == model_main.query.productType %}
+from products.items import {{type.name}}
 
-class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
-	name = "gigatron_{{model.productType.name}}"
+class Gigatron{{type.name}}Spider(scrapy.Spider):
+	name = "gigatron_{{type.name.lower()}}"
 	
 	def start_requests(self):
-		url = self.gigatron_dictionary('{{model.productType.name.lower()}}')
+		url = self.gigatron_dictionary('{{type.name.lower()}}')
 		return [scrapy.Request(url, callback=self.get_number_of_items)]
 		
 	def get_number_of_items(self, response):
@@ -21,18 +23,24 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 		
 	def parse(self,response):
 		
-		{{model.productType.name.lower()}} = {{model.productType.name}}()
+		{{type.name.lower()}} = {{type.name}}()
 		
 		properties_list = []
-		{% for prop in model.productType.properties %}
-		{% if prop.lower() == 'cena' %}
-		{{model.productType.name.lower()}}['{{prop}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
-		{% elif prop.lower() == 'naziv' or prop.lower() == 'ime' %}
-		{{model.productType.name.lower()}}['{{prop}}'] = response.css('h1::text').extract_first()
-		{% elif prop.lower() == 'url' or prop.lower() == 'link' %}
-		{{model.productType.name.lower()}}['{{prop}}'] = response.request.url
-		{% else %}	
-		properties_list.append('{{prop.lower()}}')
+		aliases_dict = {}
+		{% for prop in type.properties %}
+		{% if prop.name.lower() == 'cena' %}
+		{{type.name.lower()}}['{{prop.name}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
+		{% elif prop.name.lower() == 'naziv' or prop.name.lower() == 'ime' %}
+		{{type.name.lower()}}['{{prop.name}}'] = response.css('h1::text').extract_first()
+		{% elif prop.name.lower() == 'url' or prop.name.lower() == 'link' %}
+		{{type.name.lower()}}['{{prop.name}}'] = response.request.url
+		{% else %}
+		properties_list.append('{{prop.name.lower()}}')
+		aliases = []
+		{% for alias in prop.aliases.alias %}
+		aliases.append('{{alias}}')
+		{% endfor %}
+		aliases_dict['{{prop.name.lower()}}'] = aliases
 		{% endif %}
 		{% endfor %}
 		
@@ -50,14 +58,15 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
 				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
 			
 			for property in properties_list:
-				if property == name.lower():
-					{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+				if property == name.lower() or name.lower().replace(' ','_') in aliases_dict[property]:
+					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						{{model.productType.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
 		
-		yield {{model.productType.name.lower()}}
-			
+		yield {{type.name.lower()}}
+{% endif %}
+{% endfor %} 
 	def gigatron_dictionary(self, x):
 			return {
         	'laptop': 'https://www.gigatron.rs/laptop_racunari',
@@ -94,5 +103,5 @@ class Gigatron{{model.productType.name}}Spider(scrapy.Spider):
         	'fotoaparat' : 'https://www.gigatron.rs/digitalni_fotoaparati',
         	'gitara' : 'https://www.gigatron.rs/gitare'
         	}.get(x, '')
-        	
+ 	
         

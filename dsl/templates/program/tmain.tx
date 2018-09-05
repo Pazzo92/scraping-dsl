@@ -1,6 +1,6 @@
 from scrapy.crawler import CrawlerProcess
-from products.spiders.spider_winwin import Winwin{{model.productType.name}}Spider
-from products.spiders.spider_gigatron import Gigatron{{model.productType.name}}Spider
+from products.spiders.spider_winwin import Winwin{{model_main.query.productType}}Spider
+from products.spiders.spider_gigatron import Gigatron{{model_main.query.productType}}Spider
 from scrapy.settings import Settings
 from products import settings as my_settings
 
@@ -8,8 +8,8 @@ def crawl():
     crawler_settings = Settings()
     crawler_settings.setmodule(my_settings)
     process = CrawlerProcess(settings=crawler_settings)
-    process.crawl(Winwin{{model.productType.name}}Spider)
-    process.crawl(Gigatron{{model.productType.name}}Spider)
+    process.crawl(Winwin{{model_main.query.productType}}Spider)
+    process.crawl(Gigatron{{model_main.query.productType}}Spider)
     process.start()
     
 if  __name__ =='__main__':

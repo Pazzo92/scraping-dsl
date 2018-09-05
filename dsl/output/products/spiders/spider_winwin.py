@@ -1,13 +1,12 @@
 import scrapy
-from products.items import Gitara
 import re
 import unicodedata
-
-class WinwinGitaraSpider(scrapy.Spider):
-	name = "winwin_Gitara"
+from products.items import Televizor
+class WinwinTelevizorSpider(scrapy.Spider):
+	name = "winwin_televizor"
 	
 	def start_requests(self):
-		url = self.winwin_dictionary('gitara')
+		url = self.winwin_dictionary('televizor')
 		return [scrapy.Request(url, callback=self.parse_links)]
 		
 	def parse_links(self,response):
@@ -21,19 +20,31 @@ class WinwinGitaraSpider(scrapy.Spider):
 		
 	def parse(self,response):
 		
-		gitara = Gitara()
+		televizor = Televizor()
 		
 		properties_list = []
-		gitara['url'] = response.request.url
-		properties_list.append('tip')
-		properties_list.append('telo')
-		gitara['cena'] = response.css('div.price-box span.price::text').extract_first().strip()[:-5].replace(".","")
-		gitara['naziv'] = response.css('h1::text').extract_first()
-		properties_list.append('vrat')
+		aliases_dict = {}
+		televizor['naziv'] = response.css('h1::text').extract_first()
+		televizor['cena'] = response.css('div.price-box span.price::text').extract_first().strip()[:-5].replace(".","")
+		televizor['url'] = response.request.url
+		properties_list.append('dijagonala')
+		aliases = []
+		aliases.append('dijagonala_ekrana')
+		aliases_dict['dijagonala'] = aliases
+		properties_list.append('ekran')
+		aliases = []
+		aliases.append('tip_ekrana')
+		aliases_dict['ekran'] = aliases
 		properties_list.append('boja')
-		properties_list.append('opis')
-		properties_list.append('model')
-		properties_list.append('boja')
+		aliases = []
+		aliases_dict['boja'] = aliases
+		properties_list.append('rezolucija')
+		aliases = []
+		aliases_dict['rezolucija'] = aliases
+		properties_list.append('zvucnici')
+		aliases = []
+		aliases.append('zvuk')
+		aliases_dict['zvucnici'] = aliases
 		
 		table = response.css('div.product-panels-content table.data-table')
 		for tr in table.css('tr'):
@@ -45,13 +56,13 @@ class WinwinGitaraSpider(scrapy.Spider):
 				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
 			
 			for property in properties_list:
-				if property == name.lower():
-					gitara[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+				if property == name.lower() or name.lower().replace(' ','_') in aliases_dict[property]:
+					televizor[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						gitara[property] = re.sub(r'[^a-zA-Z0-9.\- ]',r'',value.strip())
+						televizor[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
 		
-		yield gitara
+		yield televizor
 					
 	def winwin_dictionary(self, x):
 			return {
@@ -89,3 +100,4 @@ class WinwinGitaraSpider(scrapy.Spider):
         	'fotoaparat' : 'https://www.winwin.rs/foto-oprema/digitalni-fotoaparati.html',
         	'gitara' : 'https://www.winwin.rs/tv-audio-video/muzicki-instrumenti-i-oprema.html?tip_filter=65211'		
 			}.get(x, '')  
+			

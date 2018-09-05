@@ -7,7 +7,7 @@ Type:
 ;
 
 Property:
-	property = ID aliases= Aliases? 
+	name = ID aliases= Aliases? 
 ;
 
 Aliases:

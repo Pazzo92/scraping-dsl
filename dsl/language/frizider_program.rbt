@@ -1,10 +1,1 @@
-ProductType = {
-				name "Frizider"
-				fields : "tip", "kapacitet_frizidera" , "cena" , "naziv", "sirina", "visina", "dubina", "energetski_razred", "potrosnja", "boja" , "url"
-     		   }
-Criteria = {
-				"naziv" = "Gorenje"
-				"cena" > 10000
-				"cena" < 25000
-				"energetski_razred" = "A"
-			}
+find Frizider where cena < 25000 and naziv = Gorenje and cena > 10000 and energetski_razred = A
