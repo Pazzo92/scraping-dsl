@@ -1,0 +1,23 @@
+Program:
+	query = Query
+;
+
+Query:
+	"find" productType = ID "where" criteria*=Criteria["and"]
+;
+
+Criteria:
+	greaterThan = GreaterThan | lessThan = LessThan | matches = Matches
+;
+	
+Matches:
+	field = ID "=" value = BASETYPE
+;
+
+GreaterThan:
+	field = ID ">" value = INT|FLOAT
+;
+
+LessThan:
+	field = ID "<" value = INT|FLOAT
+;
