@@ -59,9 +59,10 @@ class SpiderGenerator(BaseGenerator):
             
         self.generate(base_source_path+'/tpipelines.tx','pipelines.py', {'model': self.model_main}, program_path)
         
-        
+       # For products # 
        # spiders_file_gen_list = {'__init__', 'spider_gigatron', 'spider_winwin'}
 
+        # For poslanik @
         spiders_file_gen_list = {'__init__', 'spider_poslanik'}
 
             
@@ -71,6 +72,9 @@ class SpiderGenerator(BaseGenerator):
             
     def generate_main(self, base_path, program_path):
        
+        # For products # 
+        # self.generate(base_path+'/tmain_product.tx','main.py', {'model_main': self.model_main}, program_path)
+        # For poslanik @
         self.generate(base_path+'/tmain.tx','main.py', {'model_main': self.model_main}, program_path)
         
         os.chdir(program_path)
