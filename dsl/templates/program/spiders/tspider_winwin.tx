@@ -57,7 +57,7 @@ class Winwin{{type.name}}Spider(scrapy.Spider):
 					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
+						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
 		
 		yield {{type.name.lower()}}
 					

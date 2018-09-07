@@ -1,0 +1,76 @@
+import scrapy
+import re
+import unicodedata
+{% for type in model.productType %}
+{% if type.name == model_main.query.productType %}
+from products.items import {{type.name}}
+class {{type.name}}Spider(scrapy.Spider):
+	name = "{{type.name.lower()}}"
+	
+	def start_requests(self):
+		url = "http://www.otvoreniparlament.rs/poslanik"
+		return [scrapy.Request(url, callback=self.parse_links)]
+		
+	def parse_links(self,response):
+		links = response.xpath("//*/h3[@class='card-title']/a/@href").extract()
+		for link in links:
+			yield scrapy.Request(link, callback = self.parse_poslanicka_grupa)
+		
+	def parse_poslanicka_grupa(self,response):	
+		poslanici = response.xpath("//*/h4[@class='media-heading']/a/@href").extract()
+		for poslanik in poslanici:
+			yield scrapy.Request(poslanik)
+		
+	def parse(self,response):
+		
+		{{type.name.lower()}} = {{type.name}}()
+		
+		properties_list = []
+		aliases_dict = {}
+		{% for prop in type.properties %}
+		{% if prop.name.lower() == 'ime'%}
+		{{type.name.lower()}}['{{prop.name}}'] = response.css('div.row div.col-xs-12 h2.page-heading.text-center.text-uppercase::text').extract_first().strip().split(' ')[0].lower().capitalize()
+		{% elif prop.name.lower() == 'prezime' %}
+		{{type.name.lower()}}['{{prop.name}}'] = response.css('div.row div.col-xs-12 h2.page-heading.text-center.text-uppercase::text').extract_first().strip().split(' ')[2].lower().capitalize()
+		{% elif prop.name.lower() == 'biografija' %}
+		{{type.name.lower()}}['{{prop.name}}'] = response.css('div.row div.col-xs-12 h2.page-heading.text-center.text-uppercase::text').extract_first().strip().split(' ')[2].lower().capitalize()
+		{{prop.name}} = response.css('div.js-eq-limit::text').extract()
+		strbio = ''
+		for line in {{prop.name}}:
+			strbio += line.strip()
+		poslanik['{{prop.name}}'] = strbio
+		{% else %}
+		properties_list.append('{{prop.name.lower()}}')
+		aliases = []
+		{% for alias in prop.aliases.alias %}
+		aliases.append('{{alias}}')
+		{% endfor %}
+		aliases_dict['{{prop.name.lower()}}'] = aliases
+		{% endif %}
+		{% endfor %}
+		
+		table = response.css('div.card-content ul')
+		for li in table.css('li'):
+			name = li.css('label::text').extract_first().strip().replace(':','')
+			link = li.css('a::text').extract_first()
+			if link is not None:
+				value = link.strip()
+			else:
+				value = li.css('::text').extract()
+				for line in value:
+					value = line.strip()
+			
+			if name is not None:
+				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
+			
+			for property in properties_list:
+				if property == name.lower() or name.lower().replace(' ','_') in aliases_dict[property]:
+					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
+				elif '_' in property:
+					if property == name.lower().replace(' ','_'):
+						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
+		
+		yield {{type.name.lower()}}
+			
+{% endif %}
+{% endfor %}			

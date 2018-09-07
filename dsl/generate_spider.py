@@ -58,8 +58,12 @@ class SpiderGenerator(BaseGenerator):
                           {'model': self.model, 'model_main': self.model_main}, program_path)
             
         self.generate(base_source_path+'/tpipelines.tx','pipelines.py', {'model': self.model_main}, program_path)
-            
-        spiders_file_gen_list = {'__init__', 'spider_gigatron', 'spider_winwin'}
+        
+        
+       # spiders_file_gen_list = {'__init__', 'spider_gigatron', 'spider_winwin'}
+
+        spiders_file_gen_list = {'__init__', 'spider_poslanik'}
+
             
         for e in spiders_file_gen_list:
             self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),

@@ -3,3 +3,4 @@ Frizider (tip, kapacitet_frizidera , cena , naziv, sirina, visina, dubina, energ
 Mobilni_telefon (naziv, cena, url, velicina_ekrana(dijagonala_ekrana), rezolucija (rezolucija_ekrana), operativni_sistem, procesor(opis_procesora), interna_memorija, ram (radna_memorija,ram_memorija))
 Gitara (url, tip, telo , cena , naziv, vrat, boja, opis, model, boja)
 Televizor (naziv, cena, url, dijagonala (dijagonala_ekrana), ekran(tip_ekrana), boja, rezolucija, zvucnici(zvuk))
+Poslanik (ime, prezime, datum_rodenja, mesto_prebivalista, poslanicki_klub, zanimanje, biografija, broj_govora, broj_predlozenih_zakona, broj_podnetih_amandmana, broj_usvojenih_amandmana)
