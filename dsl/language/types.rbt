@@ -4,3 +4,4 @@ Mobilni_telefon (naziv, cena, url, velicina_ekrana(dijagonala_ekrana), rezolucij
 Gitara (url, tip, telo , cena , naziv, vrat, boja, opis, model, boja)
 Televizor (naziv, cena, url, dijagonala (dijagonala_ekrana), ekran(tip_ekrana), boja, rezolucija, zvucnici(zvuk))
 Poslanik (ime, prezime, datum_rodenja, mesto_prebivalista, poslanicki_klub, zanimanje, biografija, broj_govora, broj_predlozenih_zakona, broj_podnetih_amandmana, broj_usvojenih_amandmana)
+Movie (title, year, rating, duration, genre, release_date, storyline, director, writers, cast) 

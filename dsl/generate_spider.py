@@ -22,16 +22,14 @@ class SpiderGenerator(BaseGenerator):
         distutils.dir_util.copy_tree(necessary_source_path, base_path)
 
 
-    def generate_application(self, location=""):
-        # path to django templates
+    def generate_application(self, type):
+        
         base_source_path = os.path.join('program')
         necessary_source_path = os.path.join(SRC_DIR, 'templates',
                                              'necessary_files')
 
-        if not location:
-            outputlocation = BASE_PATH
-        else:
-            outputlocation = location
+        outputlocation = BASE_PATH
+
 
         # path to the target folder
         base_path = os.path.join(outputlocation, 'products')
@@ -41,13 +39,13 @@ class SpiderGenerator(BaseGenerator):
         # create and copy
         self.init_folder_structure(folder_gen_list)
         # generate files
-        self.generate_program(base_source_path, spiders_path, base_path)
+        self.generate_program(base_source_path, spiders_path, base_path, type)
         
         self.copy_necessary_files(necessary_source_path, outputlocation)
         # post gen events
-        self.generate_main(base_source_path,outputlocation)
+        self.generate_main(base_source_path,outputlocation, type)
 
-    def generate_program(self, base_source_path, spiders_path, program_path):
+    def generate_program(self, base_source_path, spiders_path, program_path, type):
         # program files
         
         file_gen_list = {'__init__', 'items', 'middlewares', 'settings'}
@@ -60,22 +58,24 @@ class SpiderGenerator(BaseGenerator):
         self.generate(base_source_path+'/tpipelines.tx','pipelines.py', {'model': self.model_main}, program_path)
         
        # For products # 
-       # spiders_file_gen_list = {'__init__', 'spider_gigatron', 'spider_winwin'}
-
-        # For poslanik @
-        spiders_file_gen_list = {'__init__', 'spider_poslanik'}
+        if type == 'products':
+            spiders_file_gen_list = {'__init__', 'spider_gigatron', 'spider_winwin'}
+        elif type == 'poslanik': 
+            spiders_file_gen_list = {'__init__', 'spider_poslanik'}
+        elif type == 'movie':
+            spiders_file_gen_list = {'__init__', 'spider_movie'}
 
             
         for e in spiders_file_gen_list:
             self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
                           {'model': self.model, 'model_main': self.model_main}, program_path + '/spiders')
             
-    def generate_main(self, base_path, program_path):
+    def generate_main(self, base_path, program_path, type):
        
-        # For products # 
-        # self.generate(base_path+'/tmain_product.tx','main.py', {'model_main': self.model_main}, program_path)
-        # For poslanik @
-        self.generate(base_path+'/tmain.tx','main.py', {'model_main': self.model_main}, program_path)
+        if type == 'products':
+            self.generate(base_path+'/tmain_product.tx','main.py', {'model_main': self.model_main}, program_path)
+        elif type == 'poslanik' or type =='movie': 
+            self.generate(base_path+'/tmain.tx','main.py', {'model_main': self.model_main}, program_path)
         
         os.chdir(program_path)
         os.system('python ./main.py')

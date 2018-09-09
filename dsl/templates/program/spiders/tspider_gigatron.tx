@@ -11,16 +11,19 @@ class Gigatron{{type.name}}Spider(scrapy.Spider):
 	def start_requests(self):
 		url = self.gigatron_dictionary('{{type.name.lower()}}')
 		return [scrapy.Request(url, callback=self.get_number_of_items)]
-		
+
+#function that retrieves and loads all the records
 	def get_number_of_items(self, response):
 		number_of_items = response.css('b#total::text').extract_first()
 		return [scrapy.Request(response.request.url+ '?limit=' + number_of_items, callback=self.parse_links)]
-	 
+
+# function that enters record needed
 	def parse_links(self,response):
 		links = response.xpath("//*/h4/a[@class='product-name']/@href").extract()
 		for link in links:
 			yield scrapy.Request(link)
-		
+
+# main function that parses single entity		
 	def parse(self,response):
 		
 		{{type.name.lower()}} = {{type.name}}()

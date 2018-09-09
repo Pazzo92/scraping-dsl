@@ -7,24 +7,26 @@ from products.items import {{type.name}}
 class {{type.name}}Spider(scrapy.Spider):
 	name = "{{type.name.lower()}}"
 	
+# start page
 	def start_requests(self):
 		url = "http://www.otvoreniparlament.rs/poslanik"
-		return [scrapy.Request(url, callback=self.parse_links)]
+		return [scrapy.Request(url, callback=self.container_page)]
 		
-	def parse_links(self,response):
+# function that finds all the records
+	def container_page(self,response):
 		links = response.xpath("//*/h3[@class='card-title']/a/@href").extract()
 		for link in links:
-			yield scrapy.Request(link, callback = self.parse_poslanicka_grupa)
-		
-	def parse_poslanicka_grupa(self,response):	
-		poslanici = response.xpath("//*/h4[@class='media-heading']/a/@href").extract()
-		for poslanik in poslanici:
-			yield scrapy.Request(poslanik)
-		
+			yield scrapy.Request(link, callback = self.main_page)
+			
+# function that enters record needed
+	def main_page(self,response):	
+		links = response.xpath("//*/h4[@class='media-heading']/a/@href").extract()
+		for link in links:
+			yield scrapy.Request(link)
+			
+# main function that parses single entity		
 	def parse(self,response):
-		
 		{{type.name.lower()}} = {{type.name}}()
-		
 		properties_list = []
 		aliases_dict = {}
 		{% for prop in type.properties %}

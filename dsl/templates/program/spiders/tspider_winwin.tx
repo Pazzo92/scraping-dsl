@@ -9,9 +9,10 @@ class Winwin{{type.name}}Spider(scrapy.Spider):
 	
 	def start_requests(self):
 		url = self.winwin_dictionary('{{type.name.lower()}}')
-		return [scrapy.Request(url, callback=self.parse_links)]
+		return [scrapy.Request(url, callback=self.container_page)]
 		
-	def parse_links(self,response):
+# function that finds all the records and enters each
+	def container_page(self,response):
 		links = response.xpath("//*/h2[@class='product-name']/a/@href").extract()
 		for link in links:
 			yield scrapy.Request(link)	
@@ -19,11 +20,11 @@ class Winwin{{type.name}}Spider(scrapy.Spider):
 		next_page = response.xpath("//*/a[@class='next i-next']/@href").extract_first()
 		if next_page is not None:
 			yield scrapy.Request(next_page, callback=self.parse_links)
-		
+
+# main function that parses single entity				
 	def parse(self,response):
-		
 		{{type.name.lower()}} = {{type.name}}()
-		
+
 		properties_list = []
 		aliases_dict = {}
 		{% for prop in type.properties %}
