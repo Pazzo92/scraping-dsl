@@ -1,13 +1,14 @@
 import scrapy
 
-class Movie(scrapy.Item):
-	title = scrapy.Field(optional=True)
-	year = scrapy.Field(optional=True)
-	rating = scrapy.Field(optional=True)
-	duration = scrapy.Field(optional=True)
-	genre = scrapy.Field(optional=True)
-	release_date = scrapy.Field(optional=True)
-	storyline = scrapy.Field(optional=True)
-	director = scrapy.Field(optional=True)
-	writers = scrapy.Field(optional=True)
-	cast = scrapy.Field(optional=True)
+class Poslanik(scrapy.Item):
+	ime = scrapy.Field(optional=True)
+	prezime = scrapy.Field(optional=True)
+	datum_rodenja = scrapy.Field(optional=True)
+	mesto_prebivalista = scrapy.Field(optional=True)
+	poslanicki_klub = scrapy.Field(optional=True)
+	zanimanje = scrapy.Field(optional=True)
+	biografija = scrapy.Field(optional=True)
+	broj_govora = scrapy.Field(optional=True)
+	broj_predlozenih_zakona = scrapy.Field(optional=True)
+	broj_podnetih_amandmana = scrapy.Field(optional=True)
+	broj_usvojenih_amandmana = scrapy.Field(optional=True)

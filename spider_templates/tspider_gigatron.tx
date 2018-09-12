@@ -1,0 +1,110 @@
+import scrapy
+import re
+import unicodedata
+{% for type in model.productType %}
+{% if type.name == model_main.query.productType %}
+from products.items import {{type.name}}
+
+class Gigatron{{type.name}}Spider(scrapy.Spider):
+	name = "gigatron_{{type.name.lower()}}"
+	
+	def start_requests(self):
+		url = self.gigatron_dictionary('{{type.name.lower()}}')
+		return [scrapy.Request(url, callback=self.get_number_of_items)]
+
+#function that retrieves and loads all the records
+	def get_number_of_items(self, response):
+		number_of_items = response.css('b#total::text').extract_first()
+		return [scrapy.Request(response.request.url+ '?limit=' + number_of_items, callback=self.parse_links)]
+
+# function that enters record needed
+	def parse_links(self,response):
+		links = response.xpath("//*/h4/a[@class='product-name']/@href").extract()
+		for link in links:
+			yield scrapy.Request(link)
+
+# main function that parses single entity		
+	def parse(self,response):
+		
+		{{type.name.lower()}} = {{type.name}}()
+		
+		properties_list = []
+		aliases_dict = {}
+		{% for prop in type.properties %}
+		{% if prop.name.lower() == 'cena' %}
+		{{type.name.lower()}}['{{prop.name}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
+		{% elif prop.name.lower() == 'naziv' or prop.name.lower() == 'ime' %}
+		{{type.name.lower()}}['{{prop.name}}'] = response.css('h1::text').extract_first()
+		{% elif prop.name.lower() == 'url' or prop.name.lower() == 'link' %}
+		{{type.name.lower()}}['{{prop.name}}'] = response.request.url
+		{% else %}
+		properties_list.append('{{prop.name.lower()}}')
+		aliases = []
+		{% for alias in prop.aliases.alias %}
+		aliases.append('{{alias}}')
+		{% endfor %}
+		aliases_dict['{{prop.name.lower()}}'] = aliases
+		{% endif %}
+		{% endfor %}
+		
+		table = response.css('div.main.clearfix table.product-specs')
+		for tr in table.css('tr'):
+			name = tr.css('th::text').extract_first().strip()
+			link = tr.css('a::text').extract_first()
+			if link is not None:
+				value = link.strip()
+			else:
+				value = tr.css('td::text').extract_first()
+				
+			if value is not None and name is not None:
+				value = unicodedata.normalize('NFD', value).encode('ascii', 'ignore').decode('utf-8')
+				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
+			
+			for property in properties_list:
+				if property == name.lower() or name.lower().replace(' ','_') in aliases_dict[property]:
+					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
+				elif '_' in property:
+					if property == name.lower().replace(' ','_'):
+						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
+		
+		yield {{type.name.lower()}}
+{% endif %}
+{% endfor %} 
+	def gigatron_dictionary(self, x):
+			return {
+        	'laptop': 'https://www.gigatron.rs/laptop_racunari',
+        	'tablet': 'https://www.gigatron.rs/tablet_racunari',
+        	'racunar': 'https://www.gigatron.rs/gigatron_racunari',
+        	'procesor': 'https://www.gigatron.rs/procesori',
+        	'maticna_ploca': 'https://www.gigatron.rs/maticne_ploce',
+        	'memorija': 'https://www.gigatron.rs/memorije',
+        	'hard_disk': 'https://www.gigatron.rs/hard_diskovi',
+        	'SSD': 'https://www.gigatron.rs/ssd',
+        	'monitor' : 'https://www.gigatron.rs/monitori',
+        	'tastatura' : 'https://www.gigatron.rs/tastature',
+        	'mis': 'https://www.gigatron.rs/misevi',
+        	'slusalice' : 'https://www.gigatron.rs/slusalice',
+        	'memorijska_kartica' : 'https://www.gigatron.rs/memorijske_kartice', 
+        	'USB_flash' : 'https://www.gigatron.rs/usb_flash_memorija',
+        	'stampac' : 'https://www.gigatron.rs/stampaci',
+        	'skener' : 'https://www.gigatron.rs/skeneri',
+        	'sony' : 'https://www.gigatron.rs/sony',
+        	'xbox' : 'https://www.gigatron.rs/xbox',
+        	'nintendo' : 'https://www.gigatron.rs/nintendo',
+        	'televizor' : 'https://www.gigatron.rs/televizori',
+        	'mrezna_karta' : 'https://www.gigatron.rs/mrezne_karte_i_adapteri',
+        	'ruter' : 'https://www.gigatron.rs/ruteri',
+        	'mobilni_telefon' : 'https://www.gigatron.rs/mobilni_telefoni',
+        	'telefon' : 'https://www.gigatron.rs/telefoni',
+        	'frizider' : 'https://www.gigatron.rs/frizideri',
+        	'zamrzivac' : 'https://www.gigatron.rs/zamrzivaci',
+        	'masina_za_ves' : 'https://www.gigatron.rs/masine_za_ves',
+        	'sporet' : 'https://www.gigatron.rs/sporeti_ploce_i_rerne',
+        	'mikrotalasne' : 'https://www.gigatron.rs/mikrotalasne_rerne',
+        	'klima_uredjaj' : 'https://www.gigatron.rs/klima_uredjaji_i_oprema',
+        	'bojler' : 'https://www.gigatron.rs/bojleri',
+        	'fotoaparat' : 'https://www.gigatron.rs/digitalni_fotoaparati',
+        	'gitara' : 'https://www.gigatron.rs/gitare'
+        	}.get(x, '')
+ 	
+        

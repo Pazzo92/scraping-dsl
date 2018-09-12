@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//dsl/language/laptop_program.rbt=UTF-8
 encoding//dsl/output/products/items.py=UTF-8
+encoding//dsl/output/products/spiders/spider_poslanik.py=UTF-8
 encoding//dsl/templates/program/spiders/tspider_gigatron.tx=UTF-8
 encoding//dsl/templates/program/spiders/tspider_movie.tx=UTF-8
 encoding//dsl/templates/program/spiders/tspider_poslanik.tx=UTF-8

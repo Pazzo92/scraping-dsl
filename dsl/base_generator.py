@@ -21,12 +21,14 @@ class BaseGenerator:
         self.model_main = model_main
         pass
 
-    def generate(self, template_name, output_name, render_vars, output_dir):
+    def generate(self, template_name, output_name, render_vars, output_dir,custom_code="", type=""):
         env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader("dsl", "templates"))
         template = env.get_template(template_name)
         rendered = template.render(render_vars)
 
         file_name = os.path.join(output_dir, output_name)
-        print(file_name)
         with codecs.open(file_name, "w+", "utf-8") as f:
             f.write(rendered)
+            if "spider" in output_name:
+                f.write("\n".join((2 * "\t") + i for i in custom_code.splitlines()))
+                # f.write(custom_code)

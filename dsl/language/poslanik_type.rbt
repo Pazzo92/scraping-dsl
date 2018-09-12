@@ -1,0 +1,26 @@
+Poslanik (
+ime {"div.row div.col-xs-12 h2.page-heading.text-center.text-uppercase"}[split(' '),index(0), lower(), capitalize()],
+prezime {"div.row div.col-xs-12 h2.page-heading.text-center.text-uppercase"}[split(' '),index(2), lower(), capitalize()], 
+datum_rodenja, 
+mesto_prebivalista, 
+poslanicki_klub, 
+zanimanje, 
+biografija, 
+broj_govora, 
+broj_predlozenih_zakona, 
+broj_podnetih_amandmana, 
+broj_usvojenih_amandmana
+)
+
+Table (
+tag {"div.card-content ul"},
+iterating_element {"li"},
+name {"label"}[replace(":","")],
+value {"a", " "}
+)
+---
+biografija = response.css('div.js-eq-limit::text').extract()
+strbio = ''
+for line in {{prop.name}}:
+	strbio += line.strip()
+poslanik['{{prop.name}}'] = strbio

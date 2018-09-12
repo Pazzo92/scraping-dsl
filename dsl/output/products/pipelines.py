@@ -5,7 +5,7 @@ import pymongo
 
 class ProductsMiningPipeline(object):
 
-	cast='Morgan Freeman' 
+	poslanicki_klub='Dosta je bilo' 
 	
 	def __init__(self):
 		settings = Settings()
@@ -18,7 +18,7 @@ class ProductsMiningPipeline(object):
 		self.collection = db[settings['MONGODB_COLLECTION']]
 	
 	def process_item(self, item, spider):
-		if(self.cast.replace(' ','').lower() not in item['cast'].replace(' ','').lower()):
+		if(self.poslanicki_klub.replace(' ','').lower() not in item['poslanicki_klub'].replace(' ','').lower()):
 				raise DropItem("Failed to satisfy criteria: " % item)
 		self.collection.insert(dict(item))
 		return item	

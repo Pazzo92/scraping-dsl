@@ -1,15 +1,59 @@
 ProductType:
 	productType *= Type
+	table = Table?
 ;
 
 Type:
-	name = ID "(" properties *= Property[","] ")" 
+	name = ID "(" 
+	properties *= Property[","] 
+	")" 
 ;
 
 Property:
-	name = ID aliases= Aliases? 
+	name = ID aliases= Aliases? selector=CSS? function=Function?
 ;
 
 Aliases:
 	"(" alias*= ID[","] ")"
+;
+
+CSS:
+	"{" selector *= STRING [","] "}" 
+;
+
+Table:
+	"Table ("
+	"tag" tag = Property
+	"iterating_element" iterating_element = CSS
+	name = Property
+	value = Property 
+	")"
+;
+
+Function:
+	"[" fun*= Fun [","]  "]"
+;
+
+Fun:
+	name = Capitalize|Lower|Replace|Index|Split 
+;
+
+Capitalize:
+	"capitalize"   "(" value*=BASETYPE [","] ")"
+;
+
+Lower:
+	"lower"   "(" value*=BASETYPE [","] ")"
+;
+
+Replace: 
+	"replace"  "(" value*=BASETYPE [","] ")"
+;
+
+Index:
+	"index"   "(" value*=BASETYPE [","] ")"
+;
+
+Split:
+	"split"  "(" value*=BASETYPE [","] ")"
 ;

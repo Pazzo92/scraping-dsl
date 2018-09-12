@@ -1,0 +1,52 @@
+
+    digraph xtext {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+2530789709752 -> 2530789715416[arrowtail=diamond, dir=both, headlabel="productType 0..*"]
+2530789709752[ label="{ProductType|}"]
+
+2530789715416 -> 2530789731464[arrowtail=diamond, dir=both, headlabel="properties 0..*"]
+2530789715416[ label="{Type|+name:ID\l}"]
+
+2530789731464 -> 2530789718248[arrowtail=diamond, dir=both, headlabel="aliases "]
+2530789731464 -> 2530789719192[arrowtail=diamond, dir=both, headlabel="selector "]
+2530789731464[ label="{Property|+name:ID\l}"]
+
+2530789718248[ label="{Aliases|alias:list[ID]\l}"]
+
+2530789719192[ label="{CSS|+selector:STRING\l}"]
+
+2530789696536[ label="{ID|}"]
+
+2530789720136[ label="{STRING|}"]
+
+2530789721080[ label="{BOOL|}"]
+
+2530789722024[ label="{INT|}"]
+
+2530789705032[ label="{FLOAT|}"]
+
+2530789716360[ label="{NUMBER|}"]
+2530789716360 -> 2530789705032 [dir=back]
+2530789716360 -> 2530789722024 [dir=back]
+
+2530789701256[ label="{BASETYPE|}"]
+2530789701256 -> 2530789716360 [dir=back]
+2530789701256 -> 2530789721080 [dir=back]
+2530789701256 -> 2530789696536 [dir=back]
+2530789701256 -> 2530789720136 [dir=back]
+
+2530789710696[ label="{*OBJECT|}"]
+2530789710696 -> 2530789701256 [dir=back]
+
+
+}
