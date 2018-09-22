@@ -42,7 +42,7 @@ Main DSL query is defined under product\_name\_program.rbt file.
 
 Example (movie\_program.rbt):
 
-find Movie where cast = &#39;Morgan Freeman&#39;
+>find Movie where cast = &#39;Morgan Freeman&#39;
 
 All the examples are under dsl/language folder. (together with type definition and configuration files)
 
