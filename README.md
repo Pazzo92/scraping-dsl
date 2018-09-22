@@ -51,9 +51,9 @@ All the examples are under dsl/language folder. (together with type definition a
 _\*Code expects all the files regarding the grammar definition, type definition and configuration and the main DSL query to be under dsl/language folder._
 
 In dsl/generate.py file you define the scraping item:
-type = &quot;movie&quot;
-
-main(type, False)
+>type = &quot;movie&quot;
+>
+>main(type, False)
 
 
 
