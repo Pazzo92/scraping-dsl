@@ -6,9 +6,9 @@ The project currently supports scraping top 250 movies from imdb, councils at ot
 
 # Prerequisites:
 
-        **1.** Python 2.7+
+        1. Python 2.7+
 
-        **2.** Python modules installed:
+        2. Python modules installed:
 
                 Arpeggio         1.9.0
 
@@ -26,7 +26,7 @@ The project currently supports scraping top 250 movies from imdb, councils at ot
 
                 textX            1.7.1
 
-        **3.** MongoDB database installed (with default settings)
+        3. MongoDB database installed (with default settings)
 
 # Item to be scrapped:
 
