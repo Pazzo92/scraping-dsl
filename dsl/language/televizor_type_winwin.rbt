@@ -1,0 +1,13 @@
+Televizor (
+naziv {"h1::text"}, 
+cena {"div.price-box span.price::text"}, 
+dijagonala (dijagonala_ekrana), 
+ekran(tip_ekrana), 
+boja, 
+rezolucija, 
+zvucnici(zvuk)
+Table (
+		tag {"div.product-panels-content table.data-table"},
+		row {"tr"}
+	)
+)

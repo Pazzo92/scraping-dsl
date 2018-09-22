@@ -1,0 +1,15 @@
+Frizider (
+tip, 
+kapacitet_frizidera , 
+cena {"div.price-item.currency-item h5::text"}, 
+naziv {"h1::text"}, 
+sirina, 
+visina, 
+dubina, 
+energetski_razred, 
+potrosnja, boja
+Table (
+		tag {"div.main.clearfix table.product-specs"},
+		row {"tr"}
+	)
+)

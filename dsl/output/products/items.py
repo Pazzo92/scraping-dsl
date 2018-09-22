@@ -1,14 +1,13 @@
 import scrapy
 
-class Poslanik(scrapy.Item):
-	ime = scrapy.Field(optional=True)
-	prezime = scrapy.Field(optional=True)
-	datum_rodenja = scrapy.Field(optional=True)
-	mesto_prebivalista = scrapy.Field(optional=True)
-	poslanicki_klub = scrapy.Field(optional=True)
-	zanimanje = scrapy.Field(optional=True)
-	biografija = scrapy.Field(optional=True)
-	broj_govora = scrapy.Field(optional=True)
-	broj_predlozenih_zakona = scrapy.Field(optional=True)
-	broj_podnetih_amandmana = scrapy.Field(optional=True)
-	broj_usvojenih_amandmana = scrapy.Field(optional=True)
+class Frizider(scrapy.Item):
+	tip = scrapy.Field(optional=True)
+	kapacitet_frizidera = scrapy.Field(optional=True)
+	cena = scrapy.Field(optional=True)
+	naziv = scrapy.Field(optional=True)
+	sirina = scrapy.Field(optional=True)
+	visina = scrapy.Field(optional=True)
+	dubina = scrapy.Field(optional=True)
+	energetski_razred = scrapy.Field(optional=True)
+	potrosnja = scrapy.Field(optional=True)
+	boja = scrapy.Field(optional=True)

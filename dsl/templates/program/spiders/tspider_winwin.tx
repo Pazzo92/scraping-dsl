@@ -3,6 +3,7 @@ import re
 import unicodedata
 {% for type in model.productType %}
 {% if type.name == model_main.query.productType %}
+import products.spiders.{{type.name.lower()}}_type_winwin as custom_module
 from products.items import {{type.name}}
 class Winwin{{type.name}}Spider(scrapy.Spider):
 	name = "winwin_{{type.name.lower()}}"
@@ -19,22 +20,22 @@ class Winwin{{type.name}}Spider(scrapy.Spider):
 		
 		next_page = response.xpath("//*/a[@class='next i-next']/@href").extract_first()
 		if next_page is not None:
-			yield scrapy.Request(next_page, callback=self.parse_links)
+			yield scrapy.Request(next_page, callback=self.container_page)
 
 # main function that parses single entity				
 	def parse(self,response):
 		{{type.name.lower()}} = {{type.name}}()
-
 		properties_list = []
 		aliases_dict = {}
 		{% for prop in type.properties %}
-		{% if prop.name.lower() == 'cena' %}
-		{{type.name.lower()}}['{{prop.name}}'] = response.css('div.price-box span.price::text').extract_first().strip()[:-5].replace(".","")
-		{% elif prop.name.lower() == 'naziv' or prop.name.lower() == 'ime' %}
-		{{type.name.lower()}}['{{prop.name}}'] = response.css('h1::text').extract_first()
-		{% elif prop.name.lower() == 'url' or prop.name.lower() == 'link' %}
-		{{type.name.lower()}}['{{prop.name}}'] = response.request.url
-		{% else %}
+		{% if prop.selector != None %}
+		
+		{{prop.name}} = response.css("{{prop.selector.value}}")
+		if "{{type.name}}_{{prop.name}}" in dir(custom_module):
+			{{type.name.lower()}}['{{prop.name}}']= getattr(custom_module, '{{type.name}}_{{prop.name}}')({{prop.name}})
+		else:
+			{{type.name.lower()}}['{{prop.name}}'] = {{prop.name}}.extract_first()
+		{% else %}		
 		properties_list.append('{{prop.name.lower()}}')
 		aliases = []
 		{% for alias in prop.aliases.alias %}
@@ -43,23 +44,24 @@ class Winwin{{type.name}}Spider(scrapy.Spider):
 		aliases_dict['{{prop.name.lower()}}'] = aliases
 		{% endif %}
 		{% endfor %}
+
+		{% if type.table != None %}
 		
-		table = response.css('div.product-panels-content table.data-table')
-		for tr in table.css('tr'):
-			name = tr.css('th::text').extract_first().strip()
-			value = tr.css('td::text').extract_first()
-			
-			if value is not None and name is not None:
-				value = unicodedata.normalize('NFD', value).encode('ascii', 'ignore').decode('utf-8')
+		table = response.css("{{type.table.tag.value}}")
+		for row in table.css("{{type.table.row.value}}"):
+			name = getattr(custom_module, 'Table_name')(row)
+			value = getattr(custom_module, 'Table_value')(row)
+
+			if name is not None:
 				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
 			
 			for property in properties_list:
 				if property == name.lower() or name.lower().replace(' ','_') in aliases_dict[property]:
-					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-" ]',r'',value.strip())
+					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
 						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
-		
+		{% endif %}
 		yield {{type.name.lower()}}
 					
 	def winwin_dictionary(self, x):

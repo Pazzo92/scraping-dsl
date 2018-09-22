@@ -1,21 +1,12 @@
 Movie (
-title {"div.title_wrapper h1"}, 
-year {"div.title_wrapper h1 span#titleYear"},
-rating {"div.ratingValue strong span"}, 
-duration{"div.subtext time"}, 
-release_date {"div.subtext a"}[index(-1)], 
-storyline{"div.plot_summary div.summary_text"}, 
-director {"div.credit_summary_item a"}[index(0)], 
-writers{"div.credit_summary_item a"}[index(1)], 
-cast
+title {"div.title_wrapper h1::text"}, 
+year {"div.title_wrapper h1 span#titleYear a::text"},
+rating {"div.ratingValue strong span::text"}, 
+duration{"div.subtext time::text"},
+genre{"div.subtext a::text"},
+release_date {"div.subtext a::text"}, 
+story_line{"div.plot_summary div.summary_text::text"}, 
+director {"div.credit_summary_item a::text"}, 
+writers{"div.credit_summary_item a::text"}, 
+cast {"div.article table.cast_list"}
  )
-
----
-cast = []
-table = response.css('div.article table.cast_list')
-for tr in table.css('tr'):
-	actor = tr.css('td a::text').extract_first() 
-	if actor is not None:
-		cast.append(actor.strip())
-movie['cast'] = ', '.join(cast)
-movie['genre'] = ", ".join(response.css('div.subtext a::text').extract()[:-1])

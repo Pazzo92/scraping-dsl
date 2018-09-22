@@ -2,14 +2,15 @@ import distutils.core
 import os
 import re
 import scrapy.cmdline
+from shutil import copyfile
 
 from dsl.base_generator import BaseGenerator
 from dsl.root import BASE_PATH, SRC_DIR
 
 
 class SpiderGenerator(BaseGenerator):
-    def __init__(self, model, model_main):
-        BaseGenerator.__init__(self, model, model_main)
+    def __init__(self, model, model_main, model_optional):
+        BaseGenerator.__init__(self, model, model_main, model_optional)
         pass
 
     @staticmethod
@@ -44,7 +45,17 @@ class SpiderGenerator(BaseGenerator):
         self.copy_necessary_files(necessary_source_path, outputlocation)
         # post gen events
         self.generate_main(base_source_path,outputlocation, type)
-
+        
+        # custom py module
+        if type == 'poslanik' or type =='movie': 
+            module = type+"_type.py"
+            copyfile(os.path.join(os.path.join(SRC_DIR, "language"),module), base_path+"/spiders/"+module)
+        else:
+            gigatron_module = type+"_type_gigatron.py"
+            winwin_module = type+"_type_winwin.py"
+            copyfile(os.path.join(os.path.join(SRC_DIR, "language"),gigatron_module), base_path+"/spiders/"+gigatron_module)
+            copyfile(os.path.join(os.path.join(SRC_DIR, "language"),winwin_module), base_path+"/spiders/"+winwin_module)
+            
     def generate_program(self, base_source_path, spiders_path, program_path, type, custom_code=""):
         # program files
         
@@ -60,14 +71,21 @@ class SpiderGenerator(BaseGenerator):
        # For products # 
         if type == 'poslanik': 
             spiders_file_gen_list = {'__init__', 'spider_poslanik'}
+            
         elif type == 'movie':
             spiders_file_gen_list = {'__init__', 'spider_movie'}
         else:
-            spiders_file_gen_list = {'__init__', 'spider_gigatron', 'spider_winwin'}
+            spiders_file_gen_list = {'__init__', 'spider_gigatron'}
+            spiders_file_gen_list_winwin= {'__init__', 'spider_winwin'}
             
         for e in spiders_file_gen_list:
             self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
                           {'model': self.model, 'model_main': self.model_main}, program_path + '/spiders', custom_code)
+            
+        if spiders_file_gen_list_winwin is not None:
+            for e in spiders_file_gen_list_winwin:
+                self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
+                          {'model': self.model_optional, 'model_main': self.model_main}, program_path + '/spiders', custom_code)
             
     def generate_main(self, base_path, program_path, type):
 
@@ -77,4 +95,4 @@ class SpiderGenerator(BaseGenerator):
             self.generate(base_path+'/tmain_product.tx','main.py', {'model_main': self.model_main}, program_path)    
         
         os.chdir(program_path)
- #       os.system('python ./main.py')
+        os.system('python ./main.py')

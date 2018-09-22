@@ -1,0 +1,16 @@
+Laptop (
+procesor, 
+ekran , 
+cena {"div.price-box span.price::text"}, 
+naziv {"h1::text"}, 
+memorija(radna_memorija, ram), 
+hard_disk(hdd1,ssd),
+baterija, 
+operativni_sistem, 
+graficka_kartica(graficka_karta), 
+boja
+Table (
+		tag {"div.product-panels-content table.data-table"},
+		row {"tr"}
+	)
+)

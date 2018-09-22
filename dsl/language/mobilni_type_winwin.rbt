@@ -1,0 +1,15 @@
+Mobilni_telefon (
+naziv {"h1::text"}, 
+cena {"div.price-box span.price::text"}, 
+velicina_ekrana (dijagonala_ekrana), 
+operativni_sistem, 
+boja, 
+rezolucija (rezolucija_ekrana), 
+procesor(opis_procesora)
+interna_memorija, 
+ram (radna_memorija,ram_memorija)
+Table (
+		tag {"div.product-panels-content table.data-table"},
+		row {"tr"}
+	)
+)

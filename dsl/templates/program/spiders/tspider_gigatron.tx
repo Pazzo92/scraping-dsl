@@ -3,6 +3,7 @@ import re
 import unicodedata
 {% for type in model.productType %}
 {% if type.name == model_main.query.productType %}
+import products.spiders.{{type.name.lower()}}_type_gigatron as custom_module
 from products.items import {{type.name}}
 
 class Gigatron{{type.name}}Spider(scrapy.Spider):
@@ -27,17 +28,17 @@ class Gigatron{{type.name}}Spider(scrapy.Spider):
 	def parse(self,response):
 		
 		{{type.name.lower()}} = {{type.name}}()
-		
 		properties_list = []
 		aliases_dict = {}
 		{% for prop in type.properties %}
-		{% if prop.name.lower() == 'cena' %}
-		{{type.name.lower()}}['{{prop.name}}'] = response.css('div.price-item.currency-item h5::text').extract_first().strip().replace(".","")
-		{% elif prop.name.lower() == 'naziv' or prop.name.lower() == 'ime' %}
-		{{type.name.lower()}}['{{prop.name}}'] = response.css('h1::text').extract_first()
-		{% elif prop.name.lower() == 'url' or prop.name.lower() == 'link' %}
-		{{type.name.lower()}}['{{prop.name}}'] = response.request.url
-		{% else %}
+		{% if prop.selector != None %}
+		
+		{{prop.name}} = response.css("{{prop.selector.value}}")
+		if "{{type.name}}_{{prop.name}}" in dir(custom_module):
+			{{type.name.lower()}}['{{prop.name}}']= getattr(custom_module, '{{type.name}}_{{prop.name}}')({{prop.name}})
+		else:
+			{{type.name.lower()}}['{{prop.name}}'] = {{prop.name}}.extract_first()
+		{% else %}		
 		properties_list.append('{{prop.name.lower()}}')
 		aliases = []
 		{% for alias in prop.aliases.alias %}
@@ -46,18 +47,15 @@ class Gigatron{{type.name}}Spider(scrapy.Spider):
 		aliases_dict['{{prop.name.lower()}}'] = aliases
 		{% endif %}
 		{% endfor %}
+
+		{% if type.table != None %}
 		
-		table = response.css('div.main.clearfix table.product-specs')
-		for tr in table.css('tr'):
-			name = tr.css('th::text').extract_first().strip()
-			link = tr.css('a::text').extract_first()
-			if link is not None:
-				value = link.strip()
-			else:
-				value = tr.css('td::text').extract_first()
-				
-			if value is not None and name is not None:
-				value = unicodedata.normalize('NFD', value).encode('ascii', 'ignore').decode('utf-8')
+		table = response.css("{{type.table.tag.value}}")
+		for row in table.css("{{type.table.row.value}}"):
+			name = getattr(custom_module, 'Table_name')(row)
+			value = getattr(custom_module, 'Table_value')(row)
+
+			if name is not None:
 				name = unicodedata.normalize('NFD', name).encode('ascii', 'ignore').decode('utf-8')
 			
 			for property in properties_list:
@@ -66,7 +64,7 @@ class Gigatron{{type.name}}Spider(scrapy.Spider):
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
 						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
-		
+		{% endif %}
 		yield {{type.name.lower()}}
 {% endif %}
 {% endfor %} 

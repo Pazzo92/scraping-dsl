@@ -15,10 +15,12 @@ from jinja2.loaders import PackageLoader
 class BaseGenerator:
     model = object
     model_main = object
+    model_optional = object
 
-    def __init__(self, model, model_main):
+    def __init__(self, model, model_main, model_optional=""):
         self.model = model
         self.model_main = model_main
+        self.model_optional = model_optional
         pass
 
     def generate(self, template_name, output_name, render_vars, output_dir,custom_code="", type=""):
@@ -29,6 +31,3 @@ class BaseGenerator:
         file_name = os.path.join(output_dir, output_name)
         with codecs.open(file_name, "w+", "utf-8") as f:
             f.write(rendered)
-            if "spider" in output_name:
-                f.write("\n".join((2 * "\t") + i for i in custom_code.splitlines()))
-                # f.write(custom_code)

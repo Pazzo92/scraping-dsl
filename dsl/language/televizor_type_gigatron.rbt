@@ -1,0 +1,13 @@
+Televizor (
+naziv {"h1::text"}, 
+cena {"div.price-item.currency-item h5::text"}, 
+dijagonala (dijagonala_ekrana), 
+ekran(tip_ekrana), 
+boja, 
+rezolucija, 
+zvucnici(zvuk)
+Table (
+		tag {"div.main.clearfix table.product-specs"},
+		row {"tr"}
+	)
+)
