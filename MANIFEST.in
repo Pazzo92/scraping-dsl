@@ -1,0 +1,5 @@
+include README.md
+include dsl/language/*.tx
+include dsl/templates/program/*.tx
+include dsl/templates/program/spiders/*.tx
+include dsl/templates/program/necessary_files/scrapy.cfg
