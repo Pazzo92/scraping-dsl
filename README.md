@@ -14,13 +14,9 @@ The project currently supports scraping top 250 movies from imdb, councils at ot
 
                 Jinja2           2.10
 
-                pip              10.0.1
-
                 pydot            1.2.4
 
                 pymongo          3.7.1
-
-                pyparsing        2.2.0
 
                 Scrapy           1.5.0
 
