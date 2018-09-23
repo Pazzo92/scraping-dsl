@@ -18,6 +18,7 @@ def main(type,location="", filename="", output="", debug=False):
     if type == 'movie' or type == 'poslanik':
         model = execute(os.path.join(SRC_DIR, "language"), 'type.tx', type+'_type.rbt', debug, debug )
         generator = SpiderGenerator(model, model_main)
+    
     else:
         gigatron_model = execute(os.path.join(SRC_DIR, "language"), 'type.tx', type+'_type_gigatron.rbt', debug, debug )
         winwin_model = execute(os.path.join(SRC_DIR, "language"), 'type.tx', type+'_type_winwin.rbt', debug, debug )
@@ -28,5 +29,5 @@ def main(type,location="", filename="", output="", debug=False):
 if __name__ == '__main__':
     
     # DEFINE THE TYPE OF THE SCRAPING ITEM
-    type = "frizider"
+    type = "movie"
     main(type, False)

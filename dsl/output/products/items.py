@@ -1,13 +1,13 @@
 import scrapy
 
-class Frizider(scrapy.Item):
-	tip = scrapy.Field(optional=True)
-	kapacitet_frizidera = scrapy.Field(optional=True)
-	cena = scrapy.Field(optional=True)
-	naziv = scrapy.Field(optional=True)
-	sirina = scrapy.Field(optional=True)
-	visina = scrapy.Field(optional=True)
-	dubina = scrapy.Field(optional=True)
-	energetski_razred = scrapy.Field(optional=True)
-	potrosnja = scrapy.Field(optional=True)
-	boja = scrapy.Field(optional=True)
+class Movie(scrapy.Item):
+	title = scrapy.Field(optional=True)
+	year = scrapy.Field(optional=True)
+	rating = scrapy.Field(optional=True)
+	duration = scrapy.Field(optional=True)
+	genre = scrapy.Field(optional=True)
+	release_date = scrapy.Field(optional=True)
+	story_line = scrapy.Field(optional=True)
+	director = scrapy.Field(optional=True)
+	writers = scrapy.Field(optional=True)
+	cast = scrapy.Field(optional=True)

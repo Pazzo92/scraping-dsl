@@ -9,7 +9,7 @@ from dsl.root import BASE_PATH, SRC_DIR
 
 
 class SpiderGenerator(BaseGenerator):
-    def __init__(self, model, model_main, model_optional):
+    def __init__(self, model, model_main, model_optional = ""):
         BaseGenerator.__init__(self, model, model_main, model_optional)
         pass
 
@@ -70,8 +70,7 @@ class SpiderGenerator(BaseGenerator):
         
        # For products # 
         if type == 'poslanik': 
-            spiders_file_gen_list = {'__init__', 'spider_poslanik'}
-            
+            spiders_file_gen_list = {'__init__', 'spider_poslanik'} 
         elif type == 'movie':
             spiders_file_gen_list = {'__init__', 'spider_movie'}
         else:
@@ -82,7 +81,7 @@ class SpiderGenerator(BaseGenerator):
             self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
                           {'model': self.model, 'model_main': self.model_main}, program_path + '/spiders', custom_code)
             
-        if spiders_file_gen_list_winwin is not None:
+        if type != 'poslanik' and type != "movie":
             for e in spiders_file_gen_list_winwin:
                 self.generate(base_source_path + '/spiders' +  '/t{e}.tx'.format(e=e), '{e}.py'.format(e=e),
                           {'model': self.model_optional, 'model_main': self.model_main}, program_path + '/spiders', custom_code)
