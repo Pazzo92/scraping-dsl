@@ -1,2 +1,5 @@
-.idea\misc.xml
 *.pyc
+.settings\*
+.idea\*
+*.project
+*.pydevproject
