@@ -1,0 +1,12 @@
+Movie (
+title {"div.title_wrapper h1::text"}, 
+year {"div.title_wrapper h1 span#titleYear a::text"},
+rating {"div.ratingValue strong span::text"}, 
+duration{"div.subtext time::text"},
+genre{"div.subtext a::text"},
+release_date {"div.subtext a::text"}, 
+story_line{"div.plot_summary div.summary_text::text"}, 
+director {"div.credit_summary_item a::text"}, 
+writers{"div.credit_summary_item a::text"}, 
+cast {"div.article table.cast_list"}
+ )
