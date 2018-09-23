@@ -1,0 +1,1 @@
+find Televizor where cena < 100000 and dijagonala = '32"' and naziv = Samsung

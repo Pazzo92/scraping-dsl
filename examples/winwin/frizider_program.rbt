@@ -1,0 +1,1 @@
+find Frizider where cena < 25000 and naziv = Gorenje and cena > 10000 and energetski_razred = A

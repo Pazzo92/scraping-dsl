@@ -1,0 +1,1 @@
+find Mobilni_telefon where procesor = "Octa-core" and interna_memorija = '64GB' and cena > 60000 and cena < 80000 and operativni_sistem = Android

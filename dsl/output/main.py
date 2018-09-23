@@ -1,5 +1,5 @@
 from scrapy.crawler import CrawlerProcess
-from products.spiders.spider_movie import MovieSpider
+from products.spiders.spider_imdb import MovieSpider
 from scrapy.settings import Settings
 from products import settings as my_settings
 

@@ -1,0 +1,1 @@
+find Laptop where cena > 40000 and ekran = '15.6"' and cena < 90000 and memorija = '4GB' and graficka_kartica = AMDRadeon and procesor = 'Intel Core i3'
