@@ -1,16 +1,14 @@
 # Scraping DSL
 
-Project that is using textX and Arrpeggio to define and interpret DSL in order to generate and run Scrapy project for scraping various types of items and storing it in the MongoDB.
+Project that is using textX to define and interpret DSL in order to generate and run Scrapy project for scraping various types of items and storing it in the MongoDB.
 
-The project currently supports scraping top 250 movies from imdb, councils at otvoreniparlament.rs , and all the products from gigatron and winwin website.
+The project currently supports scraping top 250 movies from imdb, councils at otvoreniparlament.rs , and all the products from gigatron and winwin website. (You can find all the examples in the examples folder)
 
 # Prerequisites:
 
         1. Python 2.7+
 
         2. Python modules installed:
-
-                Arpeggio         1.9.0
 
                 Jinja2           2.10
 
@@ -28,30 +26,29 @@ The project currently supports scraping top 250 movies from imdb, councils at ot
 
 For each item there is:
 
-1. Definition of product with properties and css selectors for each property under product\_name\_type.rbt file.
+1. Definition of product with properties and css selectors for each property under examples\domain_name\types\type_name.sdt file.
 
-2. Configuration file (.py file) for properties that include more complex manipulation of the tag content under product\_name.py file.
+2. Configuration file (.py file) for properties that include more complex manipulation of the tag content under examples\domain_name\types\type_name.py file.
 
 # DSL example:
 
-Main DSL query is defined under product\_name\_program.rbt file.
+Main DSL query is defined under examples\domain_name\type_program.sdq file.
 
-Example (movie\_program.rbt):
+Example (movie_program.sdq):
 
 >find Movie where cast = &#39;Morgan Freeman&#39;
 
-All the examples are under dsl/language folder. (together with type definition and configuration files)
+All the examples are under examples folder. (together with type definition and configuration files)
 
 # How to run:
 
-_\*Code expects all the files regarding the grammar definition, type definition and configuration and the main DSL query to be under dsl/language folder._
+_\*Code expects all the files regarding the grammar definition to be under dsl/language folder and type definition, configuration and main DSL query in the examples/domain_name folder._
 
-In dsl/generate.py file you define the scraping item:
->type = &quot;movie&quot;
+In dsl/generate.py file you define the scraping item and the domain:
+>  # DEFINE THE TYPE AND THE DOMAIN OF THE SCRAPING ITEM
+    domain = "imdb"
+    type = "movie"
 >
->main(type, False)
-
-
 
 _\*Currently supported types are: movie, poslanik and most of the products on winwin and gigatron (laptop, mobilni\_telefon, frizider, televizor etc)_
 

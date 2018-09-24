@@ -6,11 +6,10 @@ Created on 06.12.2015.
 
 import os
 
-from dsl.execute import execute
-from dsl.generate_spider import SpiderGenerator
-from dsl.root import SRC_DIR
-from dsl.root import EXAMPLES_PATH
-from shutil import copyfile
+from scraping_dsl.execute import execute
+from scraping_dsl.generate_spider import SpiderGenerator
+from scraping_dsl.root import SRC_DIR
+from scraping_dsl.root import EXAMPLES_PATH
 
 def main(type,domain, location="", filename="", output="", debug=False):
     

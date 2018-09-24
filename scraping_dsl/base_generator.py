@@ -24,7 +24,7 @@ class BaseGenerator:
         pass
 
     def generate(self, template_name, output_name, render_vars, output_dir,custom_code="", type=""):
-        env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader("dsl", "templates"))
+        env = Environment(trim_blocks=True, lstrip_blocks=True, loader=PackageLoader("scraping_dsl", "templates"))
         template = env.get_template(template_name)
         rendered = template.render(render_vars)
 

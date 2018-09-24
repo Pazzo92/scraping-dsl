@@ -10,7 +10,7 @@ import re
 import pydot
 from textx.export import metamodel_export, model_export
 from textx.metamodel import metamodel_from_file
-from dsl.root import SRC_DIR
+from scraping_dsl.root import SRC_DIR
 
 
 def execute(path, grammar_file_name, example_file_name, export_dot, export_png):

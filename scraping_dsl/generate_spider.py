@@ -4,8 +4,8 @@ import re
 import scrapy.cmdline
 from shutil import copyfile
 
-from dsl.base_generator import BaseGenerator
-from dsl.root import BASE_PATH, SRC_DIR, EXAMPLES_PATH
+from scraping_dsl.base_generator import BaseGenerator
+from scraping_dsl.root import BASE_PATH, SRC_DIR, EXAMPLES_PATH
 
 
 class SpiderGenerator(BaseGenerator):
