@@ -45,7 +45,7 @@ All the examples are under examples folder. (together with type definition and c
 _\*Code expects all the files regarding the grammar definition to be under dsl/language folder and type definition, configuration and main DSL query in the examples/domain_name folder._
 
 In dsl/generate.py file you define the scraping item and the domain:
->  # DEFINE THE TYPE AND THE DOMAIN OF THE SCRAPING ITEM
+> 
     domain = "imdb"
     type = "movie"
 >
