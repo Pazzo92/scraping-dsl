@@ -3,10 +3,10 @@ import re
 import unicodedata
 {% for type in model.productType %}
 {% if type.name == model_main.query.productType %}
-import products.spiders.{{type.name.lower()}}_type_gigatron as custom_module
+import products.spiders.{{type.name.lower()}}_type as custom_module
 from products.items import {{type.name}}
 
-class Gigatron{{type.name}}Spider(scrapy.Spider):
+class {{type.name}}Spider(scrapy.Spider):
 	name = "gigatron_{{type.name.lower()}}"
 	
 	def start_requests(self):
@@ -60,10 +60,10 @@ class Gigatron{{type.name}}Spider(scrapy.Spider):
 			
 			for property in properties_list:
 				if property == name.lower() or name.lower().replace(' ','_') in aliases_dict[property]:
-					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
+					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ÄŒÄ†Ä�Å Å½Å¾Å¡Ä‘Ä‡Ä� ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
+						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ÄŒÄ†Ä�Å Å½Å¾Å¡Ä‘Ä‡Ä� ]',r'',value.strip())
 		{% endif %}
 		yield {{type.name.lower()}}
 {% endif %}
