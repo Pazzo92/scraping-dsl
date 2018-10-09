@@ -30,13 +30,50 @@ For each item there is:
 
 2. Configuration file (.py file) for properties that include more complex manipulation of the tag content under examples\domain_name\types\type_name.py file.
 
-# DSL example:
+# Usage
+
+Type definition , example:
+> Movie (
+> title {"div.title_wrapper h1::text"}, 
+> year {"div.title_wrapper h1 span#titleYear a::text"},
+> rating {"div.ratingValue strong span::text"}, 
+> duration{"div.subtext time::text"},
+> genre{"div.subtext a::text"},
+> release_date {"div.subtext a::text"}, 
+> story_line{"div.plot_summary div.summary_text::text"}, 
+> director {"div.credit_summary_item a::text"}, 
+> writers{"div.credit_summary_item a::text"}, 
+
+Custom py module, which defines work to be performed with extracted tag for each type:
+>def Movie_title(content):
+>    return content.extract_first().strip()
+>
+>def Movie_year(content):
+>    return content.extract_first().strip()
+>
+>def Movie_duration(content):
+>    return content.extract_first().strip()
+>
+>def Movie_genre(content):
+>   return ", ".join(content.extract()[:-1])
+>
+>def Movie_release_date(content):
+>    return content.extract()[-1].strip()
+>
+>def Movie_story_line(content):
+>   return content.extract_first().strip()
+>
+>def Movie_writers(content):
+>   return content.extract()[1]
 
 Main DSL query is defined under examples\domain_name\type_program.sdq file.
 
 Example (movie_program.sdq):
 
 >find Movie where cast = &#39;Morgan Freeman&#39;
+
+Result:
+Scrapy project with Movie as the scraping item and spider_imdb defined with rules defined in previously seen .sdt and .py files.
 
 All the examples are under examples folder. (together with type definition and configuration files)
 
@@ -45,7 +82,7 @@ All the examples are under examples folder. (together with type definition and c
 _\*Code expects all the files regarding the grammar definition to be under dsl/language folder and type definition, configuration and main DSL query in the examples/domain_name folder._
 
 In dsl/generate.py file you define the scraping item and the domain:
->  # DEFINE THE TYPE AND THE DOMAIN OF THE SCRAPING ITEM
+> 
     domain = "imdb"
     type = "movie"
 >
