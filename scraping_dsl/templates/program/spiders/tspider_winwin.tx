@@ -57,10 +57,10 @@ class {{type.name}}Spider(scrapy.Spider):
 			
 			for property in properties_list:
 				if property == name.lower() or name.lower().replace(' ','_') in aliases_dict[property]:
-					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ÄŒÄ†Ä�Å Å½Å¾Å¡Ä‘Ä‡Ä� ]',r'',value.strip())
+					{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
 				elif '_' in property:
 					if property == name.lower().replace(' ','_'):
-						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ÄŒÄ†Ä�Å Å½Å¾Å¡Ä‘Ä‡Ä� ]',r'',value.strip())
+						{{type.name.lower()}}[property] = re.sub(r'[^a-zA-Z0-9.\-"ČĆĐŠŽžšđćč ]',r'',value.strip())
 		{% endif %}
 		yield {{type.name.lower()}}
 					
